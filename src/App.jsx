@@ -278,7 +278,7 @@ export default function App() {
 
       <div className="content">
         {page === "home" && <HomePage products={products} userBalance={userBalance} updateUserBalance={updateUserBalance} user={user} addPurchase={addPurchase} updateProductStock={updateProductStock} />}
-        {page === "wallet" && <WalletPage balance={userBalance} updateUserBalance={updateUserBalance} user={user} addBalanceToUser={addBalanceToUser} />}
+        {page === "wallet" && <WalletPage balance={userBalance} user={user} />}
         {page === "purchases" && <PurchasesPage user={user} />}
         {page === "admin" && isAdmin && <AdminPage products={products} addProduct={addProduct} deleteProduct={deleteProduct} updateProductStock={updateProductStock} users={users} banUser={banUser} addBalanceToUser={addBalanceToUser} />}
       </div>
@@ -513,47 +513,10 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
   );
 }
 
-function WalletPage({ balance, updateUserBalance, user, addBalanceToUser }) {
-  const [addAmount, setAddAmount] = useState('');
-
-  const handleAddFunds = async () => {
-    const amount = parseFloat(addAmount);
-    if (amount && amount > 0 && user) {
-      await addBalanceToUser(user.uid, amount);
-      setAddAmount('');
-      alert(`Successfully added $${amount} to your wallet!`);
-    } else {
-      alert('Please enter a valid amount');
-    }
-  };
-
+function WalletPage({ balance, user }) {
   return (
     <div className="page-card">
       <h1 className="page-title">💰 My Wallet</h1>
-
-      <div className="add-balance-section">
-        <h2 className="section-title">Add Balance</h2>
-        <div className="add-balance-form">
-          <input
-            type="number"
-            placeholder="Enter amount"
-            value={addAmount}
-            onChange={(e) => setAddAmount(e.target.value)}
-            className="balance-input"
-            min="0"
-            step="0.01"
-          />
-          <button className="add-balance-btn" onClick={handleAddFunds}>
-            Add Funds
-          </button>
-        </div>
-        <div className="quick-amounts">
-          <button onClick={() => setAddAmount('10')} className="quick-amount-btn">$10</button>
-          <button onClick={() => setAddAmount('25')} className="quick-amount-btn">$25</button>
-          <button onClick={() => setAddAmount('50')} className="quick-amount-btn">$50</button>
-          <button onClick={() => setAddAmount('100')} className="quick-amount-btn">$100</button>
-        </div>
-      </div>
 
       <div className="wallet-features">
         <h2 className="section-title">Wallet Features</h2>
@@ -960,7 +923,18 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
             <div key={user.id} className="user-item">
               <div className="user-info">
                 <div className="user-email">{user.email}</div>
-                <div className="user-uid">UID: {user.id}</div>
+                <div className="user-uid">
+                  UID: {user.id}
+                  <button 
+                    className="copy-uid-btn"
+                    onClick={() => {
+                      navigator.clipboard.writeText(user.id);
+                      alert('UID copied to clipboard!');
+                    }}
+                  >
+                    Copy
+                  </button>
+                </div>
                 <div className="user-details">
                   <span>Balance: ${(user.balance || 0).toFixed(2)}</span>
                   <span>Status: {user.banned ? '🚫 Banned' : '✅ Active'}</span>

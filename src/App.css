@@ -1276,6 +1276,26 @@ body {
   font-family: monospace;
   margin-bottom: 5px;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copy-uid-btn {
+  background: #2A2F3E;
+  color: #3B7AFD;
+  border: 1px solid #3B7AFD;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.copy-uid-btn:hover {
+  background: #3B7AFD;
+  color: white;
 }
 
 .user-details {
