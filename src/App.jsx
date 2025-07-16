@@ -621,16 +621,25 @@ function PurchasesPage({ user }) {
               <div className="purchase-info">
                 <h4>{purchase.productName}</h4>
                 <div className="purchase-details">
-                  <p><strong>Code:</strong> {purchase.stockData.code}</p>
-                  <p><strong>Data:</strong> {purchase.stockData.data}</p>
-                  <p style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  <p>
+                    <strong>Code:</strong>
+                    <span className="purchase-code">{purchase.stockData.code}</span>
+                  </p>
+                  <p>
+                    <strong>Data:</strong>
+                    <span className="purchase-data">{purchase.stockData.data}</span>
+                  </p>
+                  <p>
                     <strong>Price:</strong>
-                    <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-                      <img src="/IMG_1858.webp" alt="Balance" style={{width: '14px', height: '14px'}} />
-                      {purchase.price}
+                    <span style={{display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '8px'}}>
+                      <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
+                      <span style={{color: '#4CAF50', fontWeight: '600'}}>{purchase.price}</span>
                     </span>
                   </p>
-                  <p><strong>Date:</strong> {new Date(purchase.purchaseDate).toLocaleDateString()}</p>
+                  <p>
+                    <strong>Date:</strong>
+                    <span style={{color: '#A0A0A0', marginLeft: '8px'}}>{new Date(purchase.purchaseDate).toLocaleDateString()}</span>
+                  </p>
                 </div>
               </div>
               <button 
