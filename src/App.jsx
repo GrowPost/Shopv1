@@ -71,6 +71,11 @@ export default function App() {
     });
   };
 
+  const updateProductStock = async (productId, newStock) => {
+    const productRef = ref(db, `products/${productId}/stock`);
+    await set(productRef, newStock);
+  };
+
   useEffect(() => {
     onAuthStateChanged(auth, (u) => {
       setUser(u);
@@ -102,10 +107,10 @@ export default function App() {
       } else {
         // Initialize with default products if none exist
         const defaultProducts = [
-          { id: Date.now() + 1, name: "Call of Duty: Modern Warfare", price: 59.99, image: "🎮", category: "Action", code: "COD-MW-2024-X7Y9" },
-          { id: Date.now() + 2, name: "The Legend of Zelda", price: 49.99, image: "⚔️", category: "Adventure", code: "ZELDA-ADV-5K3L" },
-          { id: Date.now() + 3, name: "FIFA 2024", price: 39.99, image: "⚽", category: "Sports", code: "FIFA24-SP-9M2N" },
-          { id: Date.now() + 4, name: "Minecraft", price: 26.95, image: "🧱", category: "Sandbox", code: "MC-SB-8P4Q" }
+          { id: Date.now() + 1, name: "Call of Duty: Modern Warfare", price: 59.99, image: "🎮", category: "Action", code: "COD-MW-2024-X7Y9", stock: 50 },
+          { id: Date.now() + 2, name: "The Legend of Zelda", price: 49.99, image: "⚔️", category: "Adventure", code: "ZELDA-ADV-5K3L", stock: 30 },
+          { id: Date.now() + 3, name: "FIFA 2024", price: 39.99, image: "⚽", category: "Sports", code: "FIFA24-SP-9M2N", stock: 25 },
+          { id: Date.now() + 4, name: "Minecraft", price: 26.95, image: "🧱", category: "Sandbox", code: "MC-SB-8P4Q", stock: 100 }
         ];
         defaultProducts.forEach(product => addProduct(product));
       }
@@ -190,10 +195,10 @@ export default function App() {
       </header>
 
       <div className="content">
-        {page === "home" && <HomePage products={products} userBalance={userBalance} updateUserBalance={updateUserBalance} user={user} addPurchasedProduct={addPurchasedProduct} />}
+        {page === "home" && <HomePage products={products} userBalance={userBalance} updateUserBalance={updateUserBalance} user={user} addPurchasedProduct={addPurchasedProduct} updateProductStock={updateProductStock} />}
         {page === "wallet" && <WalletPage balance={userBalance} updateUserBalance={updateUserBalance} />}
         {page === "chat" && <ChatPage user={user} />}
-        {page === "admin" && isAdmin && <AdminPage products={products} addProduct={addProduct} deleteProduct={deleteProduct} />}
+        {page === "admin" && isAdmin && <AdminPage products={products} addProduct={addProduct} deleteProduct={deleteProduct} updateProductStock={updateProductStock} />}
         {page === "profile" && <ProfilePage user={user} />}
       </div>
 
@@ -225,11 +230,19 @@ export default function App() {
   );
 }
 
-function HomePage({ products, userBalance, updateUserBalance, user, addPurchasedProduct }) {
+function HomePage({ products, userBalance, updateUserBalance, user, addPurchasedProduct, updateProductStock }) {
   const handlePurchase = async (product) => {
     if (userBalance >= product.price) {
+      if (product.stock <= 0) {
+        alert("Sorry, this product is out of stock!");
+        return;
+      }
+      
       const newBalance = userBalance - product.price;
+      const newStock = product.stock - 1;
+      
       await updateUserBalance(newBalance);
+      await updateProductStock(product.id, newStock);
       await addPurchasedProduct(user.uid, product.id, product.code);
       alert(`Successfully purchased ${product.name}!\n\nYour activation code: ${product.code}\n\nThis code has been saved to your profile.`);
     } else {
@@ -248,12 +261,18 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchased
             <h3 className="product-name">{product.name}</h3>
             <p className="product-category">{product.category}</p>
             <div className="product-price">${product.price}</div>
+            <div className="product-stock">
+              Stock: <span className={`stock-count ${product.stock <= 5 ? 'low-stock' : ''}`}>
+                {product.stock || 0}
+              </span>
+            </div>
             <button 
-              className={`buy-btn ${userBalance < product.price ? 'disabled' : ''}`}
+              className={`buy-btn ${userBalance < product.price || product.stock <= 0 ? 'disabled' : ''}`}
               onClick={() => handlePurchase(product)}
-              disabled={userBalance < product.price}
+              disabled={userBalance < product.price || product.stock <= 0}
             >
-              {userBalance >= product.price ? 'Buy Now' : 'Insufficient Funds'}
+              {product.stock <= 0 ? 'Out of Stock' : 
+               userBalance >= product.price ? 'Buy Now' : 'Insufficient Funds'}
             </button>
           </div>
         ))}
@@ -552,13 +571,14 @@ function ChatPage({ user }) {
   );
 }
 
-function AdminPage({ products, addProduct, deleteProduct }) {
+function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
     image: '🎮',
     category: '',
-    code: ''
+    code: '',
+    stock: ''
   });
 
   const generateRandomCode = () => {
@@ -572,20 +592,21 @@ function AdminPage({ products, addProduct, deleteProduct }) {
   };
 
   const handleAddProduct = async () => {
-    if (newProduct.name && newProduct.price && newProduct.category && newProduct.code) {
+    if (newProduct.name && newProduct.price && newProduct.category && newProduct.code && newProduct.stock) {
       const product = {
         id: Date.now(),
         name: newProduct.name,
         price: parseFloat(newProduct.price),
         image: newProduct.image,
         category: newProduct.category,
-        code: newProduct.code
+        code: newProduct.code,
+        stock: parseInt(newProduct.stock)
       };
       await addProduct(product);
-      setNewProduct({ name: '', price: '', image: '🎮', category: '', code: '' });
+      setNewProduct({ name: '', price: '', image: '🎮', category: '', code: '', stock: '' });
       alert('Product added successfully!');
     } else {
-      alert('Please fill in all fields including the activation code');
+      alert('Please fill in all fields including stock quantity');
     }
   };
 
@@ -620,6 +641,13 @@ function AdminPage({ products, addProduct, deleteProduct }) {
             placeholder="Category"
             value={newProduct.category}
             onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
+            className="admin-input"
+          />
+          <input
+            type="number"
+            placeholder="Stock Quantity"
+            value={newProduct.stock}
+            onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
             className="admin-input"
           />
           <div className="code-input-group">
@@ -659,13 +687,36 @@ function AdminPage({ products, addProduct, deleteProduct }) {
         <div className="admin-products">
           {products.map(product => (
             <div key={product.id} className="admin-product-card">
-              <span>{product.image} {product.name} - ${product.price}</span>
-              <button 
-                className="delete-btn"
-                onClick={() => handleDeleteProduct(product.id)}
-              >
-                Delete
-              </button>
+              <div className="admin-product-info">
+                <span>{product.image} {product.name} - ${product.price}</span>
+                <div className="admin-stock-info">
+                  Stock: <span className={`stock-count ${product.stock <= 5 ? 'low-stock' : ''}`}>
+                    {product.stock || 0}
+                  </span>
+                </div>
+              </div>
+              <div className="admin-product-actions">
+                <div className="stock-controls">
+                  <button 
+                    className="stock-btn"
+                    onClick={() => updateProductStock(product.id, Math.max(0, product.stock - 1))}
+                  >
+                    -
+                  </button>
+                  <button 
+                    className="stock-btn"
+                    onClick={() => updateProductStock(product.id, product.stock + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+                <button 
+                  className="delete-btn"
+                  onClick={() => handleDeleteProduct(product.id)}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
