@@ -684,7 +684,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
             <div className="stock-input-group">
               <input
                 type="text"
-                placeholder="Product Code"
+                placeholder="GrowID"
                 value={newStockItem.code}
                 onChange={(e) => setNewStockItem({...newStockItem, code: e.target.value})}
                 className="admin-input"

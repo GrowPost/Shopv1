@@ -386,14 +386,15 @@ body {
 }
 
 .purchase-dialog {
-  background: #1E2233;
-  border: 1px solid #2A2F3E;
-  border-radius: 12px;
-  padding: 20px;
+  background: linear-gradient(145deg, #1E2233, #252A3F);
+  border: 1px solid #3B7AFD;
+  border-radius: 16px;
+  padding: 25px;
   max-width: 500px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .dialog-header {
@@ -535,14 +536,15 @@ body {
 
 /* Success Dialog */
 .success-dialog {
-  background: #1E2233;
-  border: 1px solid #2A2F3E;
-  border-radius: 12px;
+  background: linear-gradient(145deg, #1E2233, #252A3F);
+  border: 2px solid #3B7AFD;
+  border-radius: 16px;
   padding: 30px;
   max-width: 500px;
   width: 90%;
   max-height: 80vh;
   overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
 .success-info {
@@ -563,11 +565,13 @@ body {
 }
 
 .product-details {
-  background: #12151E;
-  border-radius: 8px;
-  padding: 20px;
+  background: linear-gradient(135deg, #12151E, #1A1F2E);
+  border: 1px solid #2A2F3E;
+  border-radius: 12px;
+  padding: 25px;
   margin: 20px 0;
   text-align: left;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .detail-item {
@@ -582,7 +586,8 @@ body {
   display: block;
   color: #3B7AFD;
   margin-bottom: 8px;
-  font-size: 0.9rem;
+  font-size: 1rem;
+  font-weight: 700;
 }
 
 .code-display, .data-display {
@@ -597,18 +602,22 @@ body {
 }
 
 .copy-btn {
-  background: #1F5CEB;
+  background: linear-gradient(45deg, #1F5CEB, #3B7AFD);
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(31, 92, 235, 0.3);
 }
 
 .copy-btn:hover {
-  background: #3B7AFD;
+  background: linear-gradient(45deg, #3B7AFD, #5A8FFF);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(31, 92, 235, 0.4);
 }
 
 .success-note {
