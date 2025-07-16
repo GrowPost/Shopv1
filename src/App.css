@@ -276,34 +276,40 @@ body {
 .page-card {
   background: #1E2233;
   border-radius: 12px;
-  padding: 30px;
-  margin: 20px;
+  padding: 35px;
+  margin: 25px;
   border: 1px solid #2A2F3E;
 }
 
 .page-title {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  margin-bottom: 30px;
+  margin-bottom: 35px;
   color: #3B7AFD;
+  text-align: center;
 }
 
 /* Products Grid */
 .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
+  gap: 20px;
   margin-top: 30px;
+  padding: 0 10px;
 }
 
 .product-card {
   background: #12151E;
   border: 1px solid #2A2F3E;
   border-radius: 12px;
-  padding: 15px;
+  padding: 20px;
   text-align: center;
   transition: all 0.3s ease;
   cursor: pointer;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .product-card:hover {
@@ -313,9 +319,9 @@ body {
 }
 
 .product-image {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 10px auto;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 15px auto;
   display: block;
   border-radius: 8px;
   object-fit: cover;
@@ -328,27 +334,32 @@ body {
 }
 
 .product-name {
-  font-size: 1.1rem;
-  margin-bottom: 8px;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
   color: white;
   font-weight: 600;
+  line-height: 1.3;
+  min-height: 2.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-category {
   color: #A0A0A0;
-  margin-bottom: 10px;
-  font-size: 0.8rem;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
 }
 
 .product-price {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #3B7AFD;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .product-stock {
-  margin: 10px 0;
+  margin: 12px 0;
   font-size: 0.9rem;
   color: #A0A0A0;
 }
@@ -366,13 +377,14 @@ body {
   background: #1F5CEB;
   color: white;
   border: none;
-  padding: 10px 15px;
+  padding: 12px 18px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   width: 100%;
-  font-size: 14px;
+  font-size: 15px;
+  margin-top: auto;
 }
 
 .buy-btn:hover:not(.disabled) {
@@ -1128,7 +1140,22 @@ body {
 
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 15px;
+    padding: 0 5px;
+  }
+
+  .product-card {
+    padding: 15px;
+    min-height: 200px;
+  }
+
+  .product-name {
+    font-size: 1rem;
+    min-height: 2.2rem;
+  }
+
+  .product-price {
+    font-size: 1.3rem;
   }
 
   .add-funds-buttons {
