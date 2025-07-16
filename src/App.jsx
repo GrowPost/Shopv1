@@ -368,7 +368,10 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
               <div style={{ display: 'none', fontSize: '4rem', marginBottom: '15px' }}>🎮</div>
               <h3 className="product-name">{product.name}</h3>
               <p className="product-category">{product.category}</p>
-              <div className="product-price">${product.price}</div>
+              <div className="product-price">
+                <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
+                {product.price}
+              </div>
               <div className="product-stock">
                 Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
                   {product.stockData ? product.stockData.length : 0}
@@ -398,7 +401,10 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
               <button className="close-btn" onClick={() => setSelectedProduct(null)}>×</button>
             </div>
             <div className="dialog-content">
-              <div className="dialog-price">${selectedProduct.price}</div>
+              <div className="dialog-price">
+                <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
+                {selectedProduct.price}
+              </div>
               <p>Available Stock: {selectedProduct.stockData ? selectedProduct.stockData.length : 0} items</p>
               <div className="purchase-info">
                 <p>You will receive a unique product code and data after purchase.</p>
@@ -412,7 +418,11 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                   }}
                   disabled={userBalance < selectedProduct.price || !selectedProduct.stockData || selectedProduct.stockData.length === 0}
                 >
-                  {userBalance >= selectedProduct.price ? `Buy for $${selectedProduct.price}` : 'Insufficient Funds'}
+                  {userBalance >= selectedProduct.price ? (
+                    <span style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'}}>
+                      Buy for <img src="/IMG_1858.webp" alt="Balance" style={{width: '14px', height: '14px'}} /> {selectedProduct.price}
+                    </span>
+                  ) : 'Insufficient Funds'}
                 </button>
               </div>
             </div>
@@ -430,7 +440,13 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
             <div className="dialog-content">
               <div className="success-info">
                 <h4>{purchaseDetails.productName}</h4>
-                <p className="purchase-price">Paid: ${purchaseDetails.price}</p>
+                <p className="purchase-price">
+                  <span>Paid:</span>
+                  <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                    <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
+                    {purchaseDetails.price}
+                  </span>
+                </p>
                 <div className="product-details">
                   <div className="detail-item">
                     <strong>Product Code:</strong>
@@ -470,7 +486,7 @@ function WalletPage({ balance, updateUserBalance }) {
   const handleAddFunds = (amount) => {
     const newBalance = balance + amount;
     updateUserBalance(newBalance);
-    alert(`Successfully added $${amount} to your wallet!`);
+    alert(`Successfully added ${amount} to your wallet!`);
   };
 
   return (
@@ -558,7 +574,13 @@ function PurchasesPage({ user }) {
                 <div className="purchase-details">
                   <p><strong>Code:</strong> {purchase.stockData.code}</p>
                   <p><strong>Data:</strong> {purchase.stockData.data}</p>
-                  <p><strong>Price:</strong> ${purchase.price}</p>
+                  <p style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                    <strong>Price:</strong>
+                    <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                      <img src="/IMG_1858.webp" alt="Balance" style={{width: '14px', height: '14px'}} />
+                      {purchase.price}
+                    </span>
+                  </p>
                   <p><strong>Date:</strong> {new Date(purchase.purchaseDate).toLocaleDateString()}</p>
                 </div>
               </div>
@@ -765,7 +787,11 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
                     }}
                   />
                   <span style={{ display: 'none' }}>🎮</span>
-                  <span>{product.name} - ${product.price}</span>
+                  <span style={{display: 'flex', alignItems: 'center', gap: '6px'}}>
+                    {product.name} - 
+                    <img src="/IMG_1858.webp" alt="Balance" style={{width: '14px', height: '14px'}} />
+                    {product.price}
+                  </span>
                 </div>
                   <div className="admin-stock-info">
                     Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
