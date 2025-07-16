@@ -146,25 +146,35 @@ body {
 }
 
 .balance-display-header {
-  background: #1E2233;
-  padding: 8px 12px;
+  background: linear-gradient(135deg, #1E2233, #2A2F3E);
+  padding: 10px 16px;
   display: flex;
   align-items: center;
   gap: 8px;
   color: white;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
+  border-radius: 8px 0 0 8px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .wallet-btn {
-  background: #1F5CEB;
-  padding: 8px 16px;
+  background: linear-gradient(135deg, #1F5CEB, #3B7AFD);
+  padding: 10px 16px;
   border: none;
   color: white;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 0 8px 8px 0;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.wallet-btn:hover {
+  background: linear-gradient(135deg, #3B7AFD, #5A8FFF);
+  transform: scale(1.05);
 }
 
 .profile-section {
@@ -470,44 +480,144 @@ body {
 }
 
 /* Wallet Page */
+.wallet-balance-container {
+  margin-bottom: 40px;
+}
+
 .wallet-balance {
   text-align: center;
-  margin-bottom: 30px;
-  padding: 30px;
-  background: linear-gradient(135deg, #1F5CEB, #3B7AFD);
-  border-radius: 12px;
+  padding: 40px;
+  background: linear-gradient(135deg, #1F5CEB 0%, #3B7AFD 50%, #5A8FFF 100%);
+  border-radius: 20px;
   color: white;
+  box-shadow: 0 20px 40px rgba(31, 92, 235, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.wallet-balance::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  transform: translateX(-100%);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.balance-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.balance-icon {
+  font-size: 2rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+.balance-label {
+  font-size: 1.2rem;
+  font-weight: 600;
+  opacity: 0.9;
 }
 
 .balance-amount {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: 4rem;
+  font-weight: 800;
   display: block;
   margin-bottom: 10px;
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: -2px;
+}
+
+.balance-subtitle {
+  font-size: 1rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+.recharge-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #3B7AFD;
+  text-align: center;
 }
 
 .add-funds-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
   margin-top: 20px;
-  flex-wrap: wrap;
 }
 
 .recharge-btn {
-  background: #1F5CEB;
+  background: linear-gradient(135deg, #12151E, #1E2233);
   color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 8px;
+  border: 2px solid #2A2F3E;
+  padding: 25px 20px;
+  border-radius: 16px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.recharge-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #1F5CEB, #3B7AFD);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.recharge-btn:hover::before {
+  opacity: 1;
 }
 
 .recharge-btn:hover {
-  background: #3B7AFD;
-  transform: translateY(-2px);
+  border-color: #3B7AFD;
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(59, 122, 253, 0.4);
+}
+
+.recharge-amount {
+  font-size: 1.8rem;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+}
+
+.recharge-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-top: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+.wallet-features {
+  margin-top: 40px;
 }
 
 /* Empty Store State */

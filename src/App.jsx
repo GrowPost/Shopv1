@@ -474,29 +474,64 @@ function WalletPage({ balance, updateUserBalance }) {
 
   return (
     <div className="page-card">
-      <h1 className="page-title">My Wallet</h1>
+      <h1 className="page-title">💰 My Wallet</h1>
 
-      <div className="wallet-balance">
-        <div className="balance-amount">${balance.toFixed(2)}</div>
-        <p>Available Balance</p>
-        <div className="add-funds-buttons">
-          <button className="recharge-btn" onClick={() => handleAddFunds(10)}>Add $10</button>
-          <button className="recharge-btn" onClick={() => handleAddFunds(25)}>Add $25</button>
-          <button className="recharge-btn" onClick={() => handleAddFunds(50)}>Add $50</button>
-          <button className="recharge-btn" onClick={() => handleAddFunds(100)}>Add $100</button>
+      <div className="wallet-balance-container">
+        <div className="wallet-balance">
+          <div className="balance-header">
+            <div className="balance-icon">💎</div>
+            <div className="balance-label">Available Balance</div>
+          </div>
+          <div className="balance-amount">${balance.toFixed(2)}</div>
+          <div className="balance-subtitle">Ready to spend on amazing games</div>
         </div>
       </div>
 
-      <div className="feature-grid">
-        <div className="feature-card">
-          <div className="feature-icon">💳</div>
-          <h3>Payment Methods</h3>
-          <p>Manage your cards and payment options</p>
+      <div className="recharge-section">
+        <h2 className="section-title">Quick Recharge</h2>
+        <div className="add-funds-buttons">
+          <button className="recharge-btn" onClick={() => handleAddFunds(10)}>
+            <div className="recharge-amount">$10</div>
+            <div className="recharge-label">Quick Top-up</div>
+          </button>
+          <button className="recharge-btn" onClick={() => handleAddFunds(25)}>
+            <div className="recharge-amount">$25</div>
+            <div className="recharge-label">Popular</div>
+          </button>
+          <button className="recharge-btn" onClick={() => handleAddFunds(50)}>
+            <div className="recharge-amount">$50</div>
+            <div className="recharge-label">Best Value</div>
+          </button>
+          <button className="recharge-btn" onClick={() => handleAddFunds(100)}>
+            <div className="recharge-amount">$100</div>
+            <div className="recharge-label">Ultimate</div>
+          </button>
         </div>
-        <div className="feature-card">
-          <div className="feature-icon">📊</div>
-          <h3>Transaction History</h3>
-          <p>View your purchase and recharge history</p>
+      </div>
+
+      <div className="wallet-features">
+        <h2 className="section-title">Wallet Features</h2>
+        <div className="feature-grid">
+          <div className="feature-card">
+            <div className="feature-icon">💳</div>
+            <h3>Payment Methods</h3>
+            <p>Manage your cards and payment options securely</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">📊</div>
+            <h3>Transaction History</h3>
+            <p>View your purchase and recharge history</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">🔒</div>
+            <h3>Security</h3>
+            <p>Your transactions are protected with encryption</p>
+          </div>
+          <div className="feature-card">
+            <div className="feature-icon">⚡</div>
+            <h3>Instant Refunds</h3>
+            <p>Get instant refunds for eligible purchases</p>
+          </div>
         </div>
       </div>
     </div>
