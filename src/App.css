@@ -642,8 +642,71 @@ body {
   font-weight: 500;
 }
 
-.recharge-section {
+.add-balance-section {
   margin-bottom: 40px;
+  padding: 25px;
+  background: #12151E;
+  border-radius: 16px;
+  border: 1px solid #2A2F3E;
+}
+
+.add-balance-form {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.balance-input {
+  background: #1E2233;
+  border: 1px solid #2A2F3E;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  font-size: 16px;
+  flex: 1;
+  max-width: 200px;
+}
+
+.balance-input:focus {
+  outline: none;
+  border-color: #3B7AFD;
+}
+
+.add-balance-btn {
+  background: #1F5CEB;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.add-balance-btn:hover {
+  background: #3B7AFD;
+}
+
+.quick-amounts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.quick-amount-btn {
+  background: #2A2F3E;
+  color: white;
+  border: 1px solid #3B7AFD;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.quick-amount-btn:hover {
+  background: #3B7AFD;
 }
 
 .section-title {
@@ -1154,6 +1217,83 @@ body {
 }
 
 .delete-btn:hover {
+  background: #FF5252;
+}
+
+.user-balance-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #1E2233;
+  border-radius: 12px;
+  border: 1px solid #2A2F3E;
+}
+
+.user-balance-section h3 {
+  color: #3B7AFD;
+  margin-bottom: 15px;
+}
+
+.user-balance-form {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.users-list {
+  margin-top: 20px;
+}
+
+.users-list h3 {
+  color: #3B7AFD;
+  margin-bottom: 15px;
+}
+
+.user-item {
+  background: #1E2233;
+  border: 1px solid #2A2F3E;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-email {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.user-details {
+  display: flex;
+  gap: 15px;
+  font-size: 0.9rem;
+  color: #A0A0A0;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.ban-btn {
+  background: #FF6B6B;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.ban-btn:hover {
   background: #FF5252;
 }
 

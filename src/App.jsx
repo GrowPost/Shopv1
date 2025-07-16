@@ -32,6 +32,7 @@ export default function App() {
   const [products, setProducts] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [users, setUsers] = useState([]);
 
   // Database functions
   const createUserProfile = async (user) => {
@@ -79,6 +80,21 @@ export default function App() {
   const updateProductStock = async (productId, newStockData) => {
     const productRef = ref(db, `products/${productId}/stockData`);
     await set(productRef, newStockData);
+  };
+
+  const banUser = async (userId, isBanned) => {
+    const userRef = ref(db, `users/${userId}/banned`);
+    await set(userRef, isBanned);
+  };
+
+  const addBalanceToUser = async (userId, amount) => {
+    const userRef = ref(db, `users/${userId}`);
+    const userSnap = await get(userRef);
+    if (userSnap.exists()) {
+      const currentBalance = userSnap.val().balance || 0;
+      const newBalance = currentBalance + amount;
+      await set(ref(db, `users/${userId}/balance`), newBalance);
+    }
   };
 
   useEffect(() => {
@@ -163,7 +179,22 @@ export default function App() {
         defaultProducts.forEach(product => addProduct(product));
       }
     });
-  }, []);
+
+    // Load all users for admin
+    if (isAdmin) {
+      const usersRef = ref(db, 'users');
+      onValue(usersRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const usersData = snapshot.val();
+          const usersArray = Object.entries(usersData).map(([key, value]) => ({
+            id: key,
+            ...value
+          }));
+          setUsers(usersArray);
+        }
+      });
+    }
+  }, [isAdmin]);
 
   if (!user) {
     return (
@@ -247,9 +278,9 @@ export default function App() {
 
       <div className="content">
         {page === "home" && <HomePage products={products} userBalance={userBalance} updateUserBalance={updateUserBalance} user={user} addPurchase={addPurchase} updateProductStock={updateProductStock} />}
-        {page === "wallet" && <WalletPage balance={userBalance} updateUserBalance={updateUserBalance} />}
+        {page === "wallet" && <WalletPage balance={userBalance} updateUserBalance={updateUserBalance} user={user} addBalanceToUser={addBalanceToUser} />}
         {page === "purchases" && <PurchasesPage user={user} />}
-        {page === "admin" && isAdmin && <AdminPage products={products} addProduct={addProduct} deleteProduct={deleteProduct} updateProductStock={updateProductStock} />}
+        {page === "admin" && isAdmin && <AdminPage products={products} addProduct={addProduct} deleteProduct={deleteProduct} updateProductStock={updateProductStock} users={users} banUser={banUser} addBalanceToUser={addBalanceToUser} />}
       </div>
 
       <nav className="nav-bar">
@@ -482,29 +513,47 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
   );
 }
 
-function WalletPage({ balance, updateUserBalance }) {
-  const handleAddFunds = (amount) => {
-    const newBalance = balance + amount;
-    updateUserBalance(newBalance);
-    alert(`Successfully added ${amount} to your wallet!`);
+function WalletPage({ balance, updateUserBalance, user, addBalanceToUser }) {
+  const [addAmount, setAddAmount] = useState('');
+
+  const handleAddFunds = async () => {
+    const amount = parseFloat(addAmount);
+    if (amount && amount > 0 && user) {
+      await addBalanceToUser(user.uid, amount);
+      setAddAmount('');
+      alert(`Successfully added $${amount} to your wallet!`);
+    } else {
+      alert('Please enter a valid amount');
+    }
   };
 
   return (
     <div className="page-card">
       <h1 className="page-title">💰 My Wallet</h1>
 
-      <div className="wallet-balance-container">
-        <div className="wallet-balance">
-          <div className="balance-header">
-            <div className="balance-icon">💎</div>
-            <div className="balance-label">Available Balance</div>
-          </div>
-          <div className="balance-amount">${balance.toFixed(2)}</div>
-          <div className="balance-subtitle">Ready to spend on amazing games</div>
+      <div className="add-balance-section">
+        <h2 className="section-title">Add Balance</h2>
+        <div className="add-balance-form">
+          <input
+            type="number"
+            placeholder="Enter amount"
+            value={addAmount}
+            onChange={(e) => setAddAmount(e.target.value)}
+            className="balance-input"
+            min="0"
+            step="0.01"
+          />
+          <button className="add-balance-btn" onClick={handleAddFunds}>
+            Add Funds
+          </button>
+        </div>
+        <div className="quick-amounts">
+          <button onClick={() => setAddAmount('10')} className="quick-amount-btn">$10</button>
+          <button onClick={() => setAddAmount('25')} className="quick-amount-btn">$25</button>
+          <button onClick={() => setAddAmount('50')} className="quick-amount-btn">$50</button>
+          <button onClick={() => setAddAmount('100')} className="quick-amount-btn">$100</button>
         </div>
       </div>
-
-      
 
       <div className="wallet-features">
         <h2 className="section-title">Wallet Features</h2>
@@ -601,7 +650,7 @@ function PurchasesPage({ user }) {
   );
 }
 
-function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) {
+function AdminPage({ products, addProduct, deleteProduct, updateProductStock, users, banUser, addBalanceToUser }) {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
@@ -610,6 +659,8 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
     stockData: []
   });
   const [newStockItem, setNewStockItem] = useState({ code: '', data: '' });
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [balanceAmount, setBalanceAmount] = useState('');
 
   const generateRandomCode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -678,6 +729,23 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
       const newStockData = product.stockData.filter((_, index) => index !== stockIndex);
       await updateProductStock(productId, newStockData);
       alert('Stock removed successfully!');
+    }
+  };
+
+  const handleBanUser = async (userId, currentBanStatus) => {
+    await banUser(userId, !currentBanStatus);
+    alert(`User ${!currentBanStatus ? 'banned' : 'unbanned'} successfully!`);
+  };
+
+  const handleAddBalanceToUser = async () => {
+    const amount = parseFloat(balanceAmount);
+    if (selectedUserId && amount && amount > 0) {
+      await addBalanceToUser(selectedUserId, amount);
+      setBalanceAmount('');
+      setSelectedUserId('');
+      alert(`Successfully added $${amount} to user's wallet!`);
+    } else {
+      alert('Please select a user and enter a valid amount');
     }
   };
 
@@ -839,6 +907,64 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
                   onClick={() => handleDeleteProduct(product.id)}
                 >
                   Delete Product
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="admin-section">
+        <h2>User Management</h2>
+        
+        <div className="user-balance-section">
+          <h3>Add Balance to User</h3>
+          <div className="user-balance-form">
+            <select 
+              value={selectedUserId} 
+              onChange={(e) => setSelectedUserId(e.target.value)}
+              className="admin-input"
+            >
+              <option value="">Select User</option>
+              {users.map(user => (
+                <option key={user.id} value={user.id}>
+                  {user.email} (Balance: ${(user.balance || 0).toFixed(2)})
+                </option>
+              ))}
+            </select>
+            <input
+              type="number"
+              placeholder="Amount to add"
+              value={balanceAmount}
+              onChange={(e) => setBalanceAmount(e.target.value)}
+              className="admin-input"
+              min="0"
+              step="0.01"
+            />
+            <button className="admin-btn" onClick={handleAddBalanceToUser}>
+              Add Balance
+            </button>
+          </div>
+        </div>
+
+        <div className="users-list">
+          <h3>All Users</h3>
+          {users.map(user => (
+            <div key={user.id} className="user-item">
+              <div className="user-info">
+                <div className="user-email">{user.email}</div>
+                <div className="user-details">
+                  <span>Balance: ${(user.balance || 0).toFixed(2)}</span>
+                  <span>Status: {user.banned ? '🚫 Banned' : '✅ Active'}</span>
+                  <span>Joined: {new Date(user.createdAt).toLocaleDateString()}</span>
+                </div>
+              </div>
+              <div className="user-actions">
+                <button 
+                  className={user.banned ? "admin-btn-secondary" : "ban-btn"}
+                  onClick={() => handleBanUser(user.id, user.banned)}
+                >
+                  {user.banned ? 'Unban' : 'Ban'}
                 </button>
               </div>
             </div>
