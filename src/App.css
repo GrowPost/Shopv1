@@ -12,6 +12,51 @@ body {
   line-height: 1.6;
 }
 
+/* Loading Screen */
+.loading-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #12151E;
+}
+
+.loading-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #2A2F3E;
+  border-top: 4px solid #3B7AFD;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.loading-text {
+  color: #A0A0A0;
+  font-size: 1rem;
+  margin: 0;
+}
+
 /* Authentication Screen */
 .auth-container {
   min-height: 100vh;
@@ -353,6 +398,21 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   position: relative;
   z-index: 1;
+}
+
+.product-card .product-image + div {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 12px auto;
+  display: none;
+  border-radius: 8px;
+  border: 2px solid #2A2F3E;
+  background: linear-gradient(135deg, #2A2F3E, #1E2233);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: all 0.4s ease;
 }
 
 .product-card:hover .product-image {
@@ -1285,12 +1345,14 @@ body {
   background: #2A2F3E;
   color: #3B7AFD;
   border: 1px solid #3B7AFD;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.7rem;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .copy-uid-btn:hover {
@@ -1314,12 +1376,14 @@ body {
   padding: 15px;
   border-radius: 8px;
   border: 1px solid #2A2F3E;
+  flex-wrap: wrap;
 }
 
 .uid-label {
   color: #3B7AFD;
   font-weight: 600;
   font-size: 0.9rem;
+  flex-shrink: 0;
 }
 
 .uid-value {
@@ -1328,6 +1392,8 @@ body {
   font-weight: 500;
   flex: 1;
   font-size: 0.9rem;
+  word-break: break-all;
+  min-width: 0;
 }
 
 .user-details {
@@ -1420,6 +1486,24 @@ body {
   .page-card {
     margin: 15px;
     padding: 20px;
+  }
+
+  .uid-display {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .uid-value {
+    text-align: center;
+    padding: 8px;
+    background: #2A2F3E;
+    border-radius: 4px;
+  }
+
+  .copy-uid-btn {
+    align-self: center;
+    width: fit-content;
   }
 
   .products-grid {

@@ -25,6 +25,7 @@ const db = getDatabase(app);
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [page, setPage] = useState("home");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -100,6 +101,7 @@ export default function App() {
   useEffect(() => {
     onAuthStateChanged(auth, (u) => {
       setUser(u);
+      setLoading(false);
       // Check if user is admin
       if (u && u.email === "admin@gamestore.com") {
         setIsAdmin(true);
@@ -195,6 +197,22 @@ export default function App() {
       });
     }
   }, [isAdmin]);
+
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="loading-content">
+          <div className="loading-spinner"></div>
+          <div className="loading-logo">
+            <span className="logo-g">Game</span>
+            <span>🎮</span>
+            <span className="logo-d">Store</span>
+          </div>
+          <p className="loading-text">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (
