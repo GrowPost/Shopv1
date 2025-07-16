@@ -487,27 +487,7 @@ function WalletPage({ balance, updateUserBalance }) {
         </div>
       </div>
 
-      <div className="recharge-section">
-        <h2 className="section-title">Quick Recharge</h2>
-        <div className="add-funds-buttons">
-          <button className="recharge-btn" onClick={() => handleAddFunds(10)}>
-            <div className="recharge-amount">$10</div>
-            <div className="recharge-label">Quick Top-up</div>
-          </button>
-          <button className="recharge-btn" onClick={() => handleAddFunds(25)}>
-            <div className="recharge-amount">$25</div>
-            <div className="recharge-label">Popular</div>
-          </button>
-          <button className="recharge-btn" onClick={() => handleAddFunds(50)}>
-            <div className="recharge-amount">$50</div>
-            <div className="recharge-label">Best Value</div>
-          </button>
-          <button className="recharge-btn" onClick={() => handleAddFunds(100)}>
-            <div className="recharge-amount">$100</div>
-            <div className="recharge-label">Ultimate</div>
-          </button>
-        </div>
-      </div>
+      
 
       <div className="wallet-features">
         <h2 className="section-title">Wallet Features</h2>
