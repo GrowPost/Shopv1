@@ -17,3 +17,15 @@ publicDir = "dist"
 [[ports]]
 localPort = 5173
 externalPort = 80
+
+[workflows]
+runButton = "Start Game Store"
+
+[[workflows.workflow]]
+name = "Start Game Store"
+author = 19132358
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
