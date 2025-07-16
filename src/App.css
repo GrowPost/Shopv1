@@ -1338,6 +1338,8 @@ body {
 
 .users-list {
   margin-top: 20px;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .users-list h3 {
@@ -1352,38 +1354,47 @@ body {
   padding: 15px;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 10px;
+  gap: 15px;
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .user-info {
   flex: 1;
+  min-width: 280px;
+  max-width: 100%;
 }
 
 .user-email {
   color: white;
   font-weight: 600;
-  margin-bottom: 3px;
+  margin-bottom: 8px;
+  word-break: break-word;
 }
 
 .user-uid {
   color: #3B7AFD;
   font-size: 0.85rem;
   font-family: monospace;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+  word-break: break-all;
 }
 
 .copy-uid-btn {
   background: #2A2F3E;
   color: #3B7AFD;
   border: 1px solid #3B7AFD;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 600;
@@ -1402,6 +1413,7 @@ body {
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 30px;
+  max-width: 100%;
 }
 
 .uid-display {
@@ -1413,6 +1425,7 @@ body {
   border-radius: 8px;
   border: 1px solid #2A2F3E;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .uid-label {
@@ -1435,13 +1448,15 @@ body {
 .user-details {
   display: flex;
   gap: 15px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #A0A0A0;
+  flex-wrap: wrap;
 }
 
 .user-actions {
   display: flex;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .ban-btn {
@@ -1636,6 +1651,31 @@ body {
 
   .code-details {
     min-width: unset;
+  }
+
+  .user-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+
+  .user-info {
+    min-width: unset;
+  }
+
+  .user-uid {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .user-details {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .user-actions {
+    align-self: stretch;
   }
 }
 
