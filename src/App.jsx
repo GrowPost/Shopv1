@@ -352,23 +352,21 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
             </div>
             <div className="dialog-content">
               <div className="dialog-price">${selectedProduct.price}</div>
-              <p>Available Stock Items:</p>
-              <div className="codes-list">
-                {selectedProduct.stockData && selectedProduct.stockData.map((stockItem, index) => (
-                  <div key={index} className="code-item">
-                    <div className="code-info">
-                      <div className="code-key">{stockItem.code}</div>
-                      <div className="code-data">{stockItem.data}</div>
-                    </div>
-                    <button 
-                      className={`buy-code-btn ${userBalance < selectedProduct.price ? 'disabled' : ''}`}
-                      onClick={() => handlePurchase(selectedProduct, stockItem, index)}
-                      disabled={userBalance < selectedProduct.price}
-                    >
-                      {userBalance >= selectedProduct.price ? 'Buy Now' : 'Insufficient Funds'}
-                    </button>
-                  </div>
-                ))}
+              <p>Available Stock: {selectedProduct.stockData ? selectedProduct.stockData.length : 0} items</p>
+              <div className="purchase-info">
+                <p>You will receive a unique product code and data after purchase.</p>
+                <button 
+                  className={`buy-product-btn ${userBalance < selectedProduct.price ? 'disabled' : ''}`}
+                  onClick={() => {
+                    if (selectedProduct.stockData && selectedProduct.stockData.length > 0) {
+                      const stockItem = selectedProduct.stockData[0]; // Get first available stock
+                      handlePurchase(selectedProduct, stockItem, 0);
+                    }
+                  }}
+                  disabled={userBalance < selectedProduct.price || !selectedProduct.stockData || selectedProduct.stockData.length === 0}
+                >
+                  {userBalance >= selectedProduct.price ? `Buy for $${selectedProduct.price}` : 'Insufficient Funds'}
+                </button>
               </div>
             </div>
           </div>
