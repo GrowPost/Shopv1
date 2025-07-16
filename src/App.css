@@ -302,19 +302,37 @@ body {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  padding: 8px 16px;
-  border-radius: 6px;
+  padding: 12px;
+  border-radius: 8px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
 }
 
 .nav-btn.active {
-  color: #3B7AFD;
   background: #1E2233;
+  transform: scale(1.1);
 }
 
 .nav-btn:hover {
-  color: #3B7AFD;
   background: #1E2233;
+  transform: scale(1.05);
+}
+
+.nav-btn img {
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+}
+
+.nav-btn.active img {
+  filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(220deg);
+}
+
+.nav-btn:hover img {
+  filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(220deg);
 }
 
 /* Pages */
@@ -1590,7 +1608,14 @@ body {
 
   .nav-btn {
     font-size: 0.9rem;
-    padding: 6px 12px;
+    padding: 10px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .nav-btn img {
+    width: 20px !important;
+    height: 20px !important;
   }
 
   .page-card {

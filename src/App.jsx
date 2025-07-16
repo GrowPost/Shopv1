@@ -307,26 +307,26 @@ export default function App() {
             className={`nav-btn ${page === "home" ? "active" : ""}`}
             onClick={() => setPage("home")}
           >
-            🏠 Store
+            <img src="/icons8-home-50.png" alt="Home" style={{width: '24px', height: '24px'}} />
           </button>
           <button 
             className={`nav-btn ${page === "wallet" ? "active" : ""}`}
             onClick={() => setPage("wallet")}
           >
-            💳 Wallet
+            <img src="/IMG_1859.png" alt="Wallet" style={{width: '24px', height: '24px'}} />
           </button>
           <button 
             className={`nav-btn ${page === "purchases" ? "active" : ""}`}
             onClick={() => setPage("purchases")}
           >
-            🛍️ Purchases
+            <img src="/icons8-purchase-60.png" alt="Purchases" style={{width: '24px', height: '24px'}} />
           </button>
           {isAdmin && (
             <button 
               className={`nav-btn ${page === "admin" ? "active" : ""}`}
               onClick={() => setPage("admin")}
             >
-              👑 Admin
+              👑
             </button>
           )}
         </div>
