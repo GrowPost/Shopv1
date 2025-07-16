@@ -62,11 +62,12 @@ export default function App() {
     await set(productRef, null);
   };
 
-  const addPurchasedProduct = async (userId, productId, code) => {
+  const addPurchasedProduct = async (userId, productId, code, data) => {
     const purchaseRef = ref(db, `users/${userId}/purchases/${productId}`);
     await set(purchaseRef, {
       productId,
       code,
+      data,
       purchaseDate: new Date().toISOString()
     });
   };
@@ -237,13 +238,17 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchased
         alert("Sorry, this product is out of stock!");
         return;
       }
-      
+
       const newBalance = userBalance - product.price;
       const newStock = product.stock - 1;
-      
+
       await updateUserBalance(newBalance);
       await updateProductStock(product.id, newStock);
-      await addPurchasedProduct(user.uid, product.id, product.code);
+      // Prompt for data
+      const data = prompt("Please enter code data:");
+      if (data === null) return; // Purchase cancelled
+
+      await addPurchasedProduct(user.uid, product.id, product.code, data);
       alert(`Successfully purchased ${product.name}!\n\nYour activation code: ${product.code}\n\nThis code has been saved to your profile.`);
     } else {
       alert("Insufficient balance! Please add funds to your wallet.");
@@ -548,7 +553,7 @@ function ChatPage({ user }) {
             😊
           </button>
         </form>
-        
+
         <div className="chat-footer">
           <div className="online-status">
             <span className="online-dot">●</span>
@@ -852,22 +857,23 @@ function ProfilePage({ user }) {
           <h2>My Game Library</h2>
           <div className="purchases-list">
             {purchases.map((purchase, index) => (
-              <div key={index} className="purchase-item">
-                <div className="purchase-info">
-                  <h4>Game Code: {purchase.code}</h4>
-                  <p>Purchased: {new Date(purchase.purchaseDate).toLocaleDateString()}</p>
+                <div key={index} className="purchase-item">
+                  <div className="purchase-info">
+                    <h4>Game Code: {purchase.code}</h4>
+                    <p className="purchase-data">Data: {purchase.data}</p>
+                    <p>Purchased: {new Date(purchase.purchaseDate).toLocaleDateString()}</p>
+                  </div>
+                  <button 
+                    className="copy-code-btn"
+                    onClick={() => {
+                      navigator.clipboard.writeText(purchase.code);
+                      alert('Code copied to clipboard!');
+                    }}
+                  >
+                    Copy Code
+                  </button>
                 </div>
-                <button 
-                  className="copy-code-btn"
-                  onClick={() => {
-                    navigator.clipboard.writeText(purchase.code);
-                    alert('Code copied to clipboard!');
-                  }}
-                >
-                  Copy Code
-                </button>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       )}
