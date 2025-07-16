@@ -1065,22 +1065,26 @@ body {
 
 /* Admin Page */
 .admin-section {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   padding: 20px;
   background: #12151E;
   border-radius: 12px;
   border: 1px solid #2A2F3E;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .admin-section h2 {
   color: #3B7AFD;
   margin-bottom: 20px;
+  font-size: 1.5rem;
 }
 
 .admin-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  max-width: 100%;
 }
 
 .admin-input {
@@ -1091,6 +1095,8 @@ body {
   border-radius: 8px;
   font-size: 14px;
   transition: border-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .admin-input:focus {
@@ -1111,6 +1117,8 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: background 0.3s ease;
+  width: 100%;
+  max-width: 200px;
 }
 
 .admin-btn:hover, .admin-btn-secondary:hover {
@@ -1127,21 +1135,25 @@ body {
   padding: 15px;
   margin: 15px 0;
   background: #1E2233;
+  max-width: 100%;
 }
 
 .stock-section h3 {
   color: #3B7AFD;
   margin-bottom: 15px;
+  font-size: 1.2rem;
 }
 
 .stock-input-group {
   display: flex;
   gap: 10px;
   margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
 .stock-input-group .admin-input {
   flex: 1;
+  min-width: 200px;
 }
 
 .generate-code-btn {
@@ -1208,6 +1220,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 15px;
+  max-width: 100%;
 }
 
 .admin-product-card {
@@ -1219,10 +1232,14 @@ body {
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
+  flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .admin-product-info {
   flex: 1;
+  min-width: 300px;
+  max-width: 100%;
 }
 
 .admin-stock-info {
@@ -1233,6 +1250,7 @@ body {
 
 .codes-info {
   margin-top: 15px;
+  max-width: 100%;
 }
 
 .codes-info h4 {
@@ -1247,6 +1265,8 @@ body {
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #2A2F3E;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .code-stock-item:last-child {
@@ -1257,12 +1277,16 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
+  min-width: 200px;
+  word-break: break-all;
 }
 
 .admin-product-actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .delete-btn {
@@ -1274,6 +1298,7 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: background 0.3s ease;
+  white-space: nowrap;
 }
 
 .delete-btn:hover {
@@ -1286,11 +1311,13 @@ body {
   background: #1E2233;
   border-radius: 12px;
   border: 1px solid #2A2F3E;
+  max-width: 100%;
 }
 
 .user-balance-section h3 {
   color: #3B7AFD;
   margin-bottom: 15px;
+  font-size: 1.2rem;
 }
 
 .user-balance-form {
@@ -1298,6 +1325,15 @@ body {
   gap: 15px;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.user-balance-form .admin-input {
+  min-width: 200px;
+  flex: 1;
+}
+
+.user-balance-form .admin-btn {
+  flex-shrink: 0;
 }
 
 .users-list {
@@ -1547,14 +1583,59 @@ body {
     gap: 15px;
   }
 
+  .admin-section {
+    margin-bottom: 20px;
+    padding: 15px;
+  }
+
   .admin-product-card {
     flex-direction: column;
     gap: 15px;
+    padding: 12px;
+  }
+
+  .admin-product-info {
+    min-width: unset;
   }
 
   .admin-product-actions {
     flex-direction: row;
     align-self: stretch;
+  }
+
+  .stock-input-group {
+    flex-direction: column;
+  }
+
+  .stock-input-group .admin-input {
+    min-width: unset;
+  }
+
+  .user-balance-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .user-balance-form .admin-input {
+    min-width: unset;
+  }
+
+  .user-balance-form .admin-btn {
+    max-width: unset;
+  }
+
+  .admin-btn, .admin-btn-secondary {
+    max-width: unset;
+  }
+
+  .code-stock-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .code-details {
+    min-width: unset;
   }
 }
 
