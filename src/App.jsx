@@ -925,13 +925,20 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
               onChange={(e) => setSelectedUserId(e.target.value)}
               className="admin-input"
             >
-              <option value="">Select User</option>
+              <option value="">Select User by UID</option>
               {users.map(user => (
                 <option key={user.id} value={user.id}>
-                  {user.email} (Balance: ${(user.balance || 0).toFixed(2)})
+                  UID: {user.id} - {user.email} (Balance: ${(user.balance || 0).toFixed(2)})
                 </option>
               ))}
             </select>
+            <input
+              type="text"
+              placeholder="Or enter UID directly"
+              value={selectedUserId}
+              onChange={(e) => setSelectedUserId(e.target.value)}
+              className="admin-input"
+            />
             <input
               type="number"
               placeholder="Amount to add"
@@ -953,6 +960,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
             <div key={user.id} className="user-item">
               <div className="user-info">
                 <div className="user-email">{user.email}</div>
+                <div className="user-uid">UID: {user.id}</div>
                 <div className="user-details">
                   <span>Balance: ${(user.balance || 0).toFixed(2)}</span>
                   <span>Status: {user.banned ? '🚫 Banned' : '✅ Active'}</span>

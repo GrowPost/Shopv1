@@ -1267,7 +1267,15 @@ body {
 .user-email {
   color: white;
   font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.user-uid {
+  color: #3B7AFD;
+  font-size: 0.85rem;
+  font-family: monospace;
   margin-bottom: 5px;
+  font-weight: 500;
 }
 
 .user-details {
