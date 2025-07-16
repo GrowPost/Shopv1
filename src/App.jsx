@@ -62,7 +62,7 @@ export default function App() {
 
   const deleteProduct = async (productId) => {
     const productRef = ref(db, `products/${productId}`);
-    await set(productRef, null);
+    await remove(productRef);
   };
 
   const addPurchase = async (userId, productId, productName, price, stockData) => {
@@ -118,7 +118,7 @@ export default function App() {
             id: Date.now() + 1, 
             name: "Call of Duty: Modern Warfare", 
             price: 59.99, 
-            image: "🎮", 
+            image: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=200&h=200&fit=crop", 
             category: "Action",
             stockData: [
               { code: "COD-MW-2024-X7Y9", data: "Premium Edition Key" },
@@ -129,7 +129,7 @@ export default function App() {
             id: Date.now() + 2, 
             name: "The Legend of Zelda", 
             price: 49.99, 
-            image: "⚔️", 
+            image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop", 
             category: "Adventure",
             stockData: [
               { code: "ZELDA-ADV-5K3L", data: "Collector's Edition" },
@@ -141,7 +141,7 @@ export default function App() {
             id: Date.now() + 3, 
             name: "FIFA 2024", 
             price: 39.99, 
-            image: "⚽", 
+            image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=200&h=200&fit=crop", 
             category: "Sports",
             stockData: [
               { code: "FIFA24-SP-9M2N", data: "Ultimate Team Edition" }
@@ -151,7 +151,7 @@ export default function App() {
             id: Date.now() + 4, 
             name: "Minecraft", 
             price: 26.95, 
-            image: "🧱", 
+            image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=200&h=200&fit=crop", 
             category: "Sandbox",
             stockData: [
               { code: "MC-SB-8P4Q", data: "Java Edition" },
@@ -355,7 +355,16 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
         <div className="products-grid">
           {products.map(product => (
             <div key={product.id} className="product-card" onClick={() => handleProductClick(product)}>
-              <div className="product-image">{product.image}</div>
+              <img 
+                src={product.image} 
+                alt={product.name}
+                className="product-image"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+              <div style={{ display: 'none', fontSize: '4rem', marginBottom: '15px' }}>🎮</div>
               <h3 className="product-name">{product.name}</h3>
               <p className="product-category">{product.category}</p>
               <div className="product-price">${product.price}</div>
@@ -558,7 +567,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
-    image: '🎮',
+    image: '',
     category: '',
     stockData: []
   });
@@ -602,7 +611,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
         stockData: newProduct.stockData
       };
       await addProduct(product);
-      setNewProduct({ name: '', price: '', image: '🎮', category: '', stockData: [] });
+      setNewProduct({ name: '', price: '', image: '', category: '', stockData: [] });
       alert('Product added successfully!');
     } else {
       alert('Please fill in all fields and add at least one stock item');
@@ -662,18 +671,13 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
             onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
             className="admin-input"
           />
-          <select 
+          <input
+            type="url"
+            placeholder="Image URL (e.g., https://example.com/image.jpg)"
             value={newProduct.image}
             onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
             className="admin-input"
-          >
-            <option value="🎮">🎮</option>
-            <option value="⚔️">⚔️</option>
-            <option value="⚽">⚽</option>
-            <option value="🧱">🧱</option>
-            <option value="🏎️">🏎️</option>
-            <option value="👾">👾</option>
-          </select>
+          />
 
           <div className="stock-section">
             <h3>Add Stock Items</h3>
@@ -734,7 +738,19 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
             <div key={product.id} className="admin-product-card">
               <div className="admin-product-info">
                 <div>
-                  <span>{product.image} {product.name} - ${product.price}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <img 
+                    src={product.image} 
+                    alt={product.name}
+                    style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }}
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'inline';
+                    }}
+                  />
+                  <span style={{ display: 'none' }}>🎮</span>
+                  <span>{product.name} - ${product.price}</span>
+                </div>
                   <div className="admin-stock-info">
                     Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
                       {product.stockData ? product.stockData.length : 0} items
