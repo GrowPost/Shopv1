@@ -12,7 +12,9 @@ import {
   ref,
   set,
   get,
-  onValue
+  onValue,
+  push,
+  remove
 } from "firebase/database";
 import { firebaseConfig } from "./firebaseConfig";
 import "./App.css";
@@ -40,7 +42,8 @@ export default function App() {
       await set(userRef, {
         email: user.email,
         balance: 125.50,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        purchases: {}
       });
     }
   };
@@ -62,25 +65,26 @@ export default function App() {
     await set(productRef, null);
   };
 
-  const addPurchasedProduct = async (userId, productId, code, data) => {
-    const purchaseRef = ref(db, `users/${userId}/purchases/${productId}`);
+  const addPurchase = async (userId, productId, productName, price, stockData) => {
+    const purchaseRef = push(ref(db, `users/${userId}/purchases`));
     await set(purchaseRef, {
       productId,
-      code,
-      data,
+      productName,
+      price,
+      stockData,
       purchaseDate: new Date().toISOString()
     });
   };
 
-  const updateProductStock = async (productId, newStock) => {
-    const productRef = ref(db, `products/${productId}/stock`);
-    await set(productRef, newStock);
+  const updateProductStock = async (productId, newStockData) => {
+    const productRef = ref(db, `products/${productId}/stockData`);
+    await set(productRef, newStockData);
   };
 
   useEffect(() => {
     onAuthStateChanged(auth, (u) => {
       setUser(u);
-      // Check if user is admin (you can modify this logic)
+      // Check if user is admin
       if (u && u.email === "admin@gamestore.com") {
         setIsAdmin(true);
       }
@@ -106,12 +110,53 @@ export default function App() {
         const productsArray = Object.values(productsData);
         setProducts(productsArray);
       } else {
-        // Initialize with default products if none exist
+        // Initialize with default products
         const defaultProducts = [
-          { id: Date.now() + 1, name: "Call of Duty: Modern Warfare", price: 59.99, image: "🎮", category: "Action", code: "COD-MW-2024-X7Y9", stock: 50 },
-          { id: Date.now() + 2, name: "The Legend of Zelda", price: 49.99, image: "⚔️", category: "Adventure", code: "ZELDA-ADV-5K3L", stock: 30 },
-          { id: Date.now() + 3, name: "FIFA 2024", price: 39.99, image: "⚽", category: "Sports", code: "FIFA24-SP-9M2N", stock: 25 },
-          { id: Date.now() + 4, name: "Minecraft", price: 26.95, image: "🧱", category: "Sandbox", code: "MC-SB-8P4Q", stock: 100 }
+          { 
+            id: Date.now() + 1, 
+            name: "Call of Duty: Modern Warfare", 
+            price: 59.99, 
+            image: "🎮", 
+            category: "Action",
+            stockData: [
+              { code: "COD-MW-2024-X7Y9", data: "Premium Edition Key" },
+              { code: "COD-MW-2024-B3K8", data: "Standard Edition Key" }
+            ]
+          },
+          { 
+            id: Date.now() + 2, 
+            name: "The Legend of Zelda", 
+            price: 49.99, 
+            image: "⚔️", 
+            category: "Adventure",
+            stockData: [
+              { code: "ZELDA-ADV-5K3L", data: "Collector's Edition" },
+              { code: "ZELDA-ADV-M9P2", data: "Digital Deluxe" },
+              { code: "ZELDA-ADV-Q7R4", data: "Standard Edition" }
+            ]
+          },
+          { 
+            id: Date.now() + 3, 
+            name: "FIFA 2024", 
+            price: 39.99, 
+            image: "⚽", 
+            category: "Sports",
+            stockData: [
+              { code: "FIFA24-SP-9M2N", data: "Ultimate Team Edition" }
+            ]
+          },
+          { 
+            id: Date.now() + 4, 
+            name: "Minecraft", 
+            price: 26.95, 
+            image: "🧱", 
+            category: "Sandbox",
+            stockData: [
+              { code: "MC-SB-8P4Q", data: "Java Edition" },
+              { code: "MC-SB-7N5M", data: "Bedrock Edition" },
+              { code: "MC-SB-K2J6", data: "Education Edition" }
+            ]
+          }
         ];
         defaultProducts.forEach(product => addProduct(product));
       }
@@ -122,7 +167,7 @@ export default function App() {
     return (
       <div className="auth-container">
         <div className="auth-card">
-          <h2 className="auth-title">Welcome Back</h2>
+          <h2 className="auth-title">Game Store</h2>
           <input
             className="auth-input"
             placeholder="Email"
@@ -151,6 +196,9 @@ export default function App() {
               Login
             </button>
           </div>
+          <p style={{marginTop: '20px', color: '#A0A0A0', fontSize: '14px'}}>
+            Admin login: admin@gamestore.com / password: admin123
+          </p>
         </div>
       </div>
     );
@@ -160,17 +208,16 @@ export default function App() {
     <div className="main-container">
       <header className="header">
         <div className="logo">
-          <span className="logo-g">G</span>
-          <span>🎲</span>
-          <span className="logo-d">D</span>
+          <span className="logo-g">Game</span>
+          <span>🎮</span>
+          <span className="logo-d">Store</span>
         </div>
         <div className="wallet-section">
           <div className="balance-display-header">
-            <img src="/IMG_1858.webp" alt="wallet" style={{width: '20px', height: '20px'}} />
-            <span>${userBalance.toFixed(2)}</span>
+            💰 ${userBalance.toFixed(2)}
           </div>
           <button className="wallet-btn" onClick={() => setPage("wallet")}>
-            <img src="/IMG_1859.png" alt="wallet" style={{width: '20px', height: '20px'}} />
+            💳
           </button>
         </div>
         <div className="profile-section">
@@ -182,9 +229,9 @@ export default function App() {
           </button>
           {showProfileDropdown && (
             <div className="profile-dropdown">
-              <div className="profile-dropdown-item" onClick={() => { setPage("profile"); setShowProfileDropdown(false); }}>
-                <span>👤</span>
-                <span>Profile</span>
+              <div className="profile-dropdown-item" onClick={() => { setPage("purchases"); setShowProfileDropdown(false); }}>
+                <span>🛍️</span>
+                <span>My Purchases</span>
               </div>
               <div className="profile-dropdown-item" onClick={() => { signOut(auth); setShowProfileDropdown(false); }}>
                 <span>🚪</span>
@@ -196,11 +243,10 @@ export default function App() {
       </header>
 
       <div className="content">
-        {page === "home" && <HomePage products={products} userBalance={userBalance} updateUserBalance={updateUserBalance} user={user} addPurchasedProduct={addPurchasedProduct} updateProductStock={updateProductStock} />}
+        {page === "home" && <HomePage products={products} userBalance={userBalance} updateUserBalance={updateUserBalance} user={user} addPurchase={addPurchase} updateProductStock={updateProductStock} />}
         {page === "wallet" && <WalletPage balance={userBalance} updateUserBalance={updateUserBalance} />}
-        {page === "chat" && <ChatPage user={user} />}
+        {page === "purchases" && <PurchasesPage user={user} />}
         {page === "admin" && isAdmin && <AdminPage products={products} addProduct={addProduct} deleteProduct={deleteProduct} updateProductStock={updateProductStock} />}
-        {page === "profile" && <ProfilePage user={user} />}
       </div>
 
       <nav className="nav-bar">
@@ -209,13 +255,19 @@ export default function App() {
             className={`nav-btn ${page === "home" ? "active" : ""}`}
             onClick={() => setPage("home")}
           >
-            🏠 Home
+            🏠 Store
           </button>
           <button 
-            className={`nav-btn ${page === "chat" ? "active" : ""}`}
-            onClick={() => setPage("chat")}
+            className={`nav-btn ${page === "wallet" ? "active" : ""}`}
+            onClick={() => setPage("wallet")}
           >
-            💬 Chat
+            💳 Wallet
+          </button>
+          <button 
+            className={`nav-btn ${page === "purchases" ? "active" : ""}`}
+            onClick={() => setPage("purchases")}
+          >
+            🛍️ Purchases
           </button>
           {isAdmin && (
             <button 
@@ -231,25 +283,30 @@ export default function App() {
   );
 }
 
-function HomePage({ products, userBalance, updateUserBalance, user, addPurchasedProduct, updateProductStock }) {
-  const handlePurchase = async (product) => {
-    if (userBalance >= product.price) {
-      if (product.stock <= 0) {
-        alert("Sorry, this product is out of stock!");
-        return;
-      }
+function HomePage({ products, userBalance, updateUserBalance, user, addPurchase, updateProductStock }) {
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
+  const handleProductClick = (product) => {
+    if (product.stockData && product.stockData.length > 0) {
+      setSelectedProduct(product);
+    } else {
+      alert("This product is out of stock!");
+    }
+  };
+
+  const handlePurchase = async (product, stockItem, stockIndex) => {
+    if (userBalance >= product.price) {
       const newBalance = userBalance - product.price;
-      const newStock = product.stock - 1;
+
+      // Remove purchased stock item
+      const newStockData = product.stockData.filter((_, index) => index !== stockIndex);
 
       await updateUserBalance(newBalance);
-      await updateProductStock(product.id, newStock);
-      // Prompt for data
-      const data = prompt("Please enter code data:");
-      if (data === null) return; // Purchase cancelled
+      await updateProductStock(product.id, newStockData);
+      await addPurchase(user.uid, product.id, product.name, product.price, stockItem);
 
-      await addPurchasedProduct(user.uid, product.id, product.code, data);
-      alert(`Successfully purchased ${product.name}!\n\nYour activation code: ${product.code}\n\nThis code has been saved to your profile.`);
+      alert(`Successfully purchased ${product.name}!\n\nCode: ${stockItem.code}\nData: ${stockItem.data}\n\nThis has been saved to your purchases.`);
+      setSelectedProduct(null);
     } else {
       alert("Insufficient balance! Please add funds to your wallet.");
     }
@@ -261,27 +318,62 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchased
 
       <div className="products-grid">
         {products.map(product => (
-          <div key={product.id} className="product-card">
+          <div key={product.id} className="product-card" onClick={() => handleProductClick(product)}>
             <div className="product-image">{product.image}</div>
             <h3 className="product-name">{product.name}</h3>
             <p className="product-category">{product.category}</p>
             <div className="product-price">${product.price}</div>
             <div className="product-stock">
-              Stock: <span className={`stock-count ${product.stock <= 5 ? 'low-stock' : ''}`}>
-                {product.stock || 0}
+              Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
+                {product.stockData ? product.stockData.length : 0}
               </span>
             </div>
             <button 
-              className={`buy-btn ${userBalance < product.price || product.stock <= 0 ? 'disabled' : ''}`}
-              onClick={() => handlePurchase(product)}
-              disabled={userBalance < product.price || product.stock <= 0}
+              className={`buy-btn ${userBalance < product.price || !product.stockData || product.stockData.length === 0 ? 'disabled' : ''}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleProductClick(product);
+              }}
+              disabled={userBalance < product.price || !product.stockData || product.stockData.length === 0}
             >
-              {product.stock <= 0 ? 'Out of Stock' : 
-               userBalance >= product.price ? 'Buy Now' : 'Insufficient Funds'}
+              {!product.stockData || product.stockData.length === 0 ? 'Out of Stock' : 
+               userBalance >= product.price ? 'View Details' : 'Insufficient Funds'}
             </button>
           </div>
         ))}
       </div>
+
+      {selectedProduct && (
+        <div className="purchase-dialog-overlay" onClick={() => setSelectedProduct(null)}>
+          <div className="purchase-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="dialog-header">
+              <h3>{selectedProduct.name}</h3>
+              <button className="close-btn" onClick={() => setSelectedProduct(null)}>×</button>
+            </div>
+            <div className="dialog-content">
+              <div className="dialog-price">${selectedProduct.price}</div>
+              <p>Available Stock Items:</p>
+              <div className="codes-list">
+                {selectedProduct.stockData && selectedProduct.stockData.map((stockItem, index) => (
+                  <div key={index} className="code-item">
+                    <div className="code-info">
+                      <div className="code-key">{stockItem.code}</div>
+                      <div className="code-data">{stockItem.data}</div>
+                    </div>
+                    <button 
+                      className={`buy-code-btn ${userBalance < selectedProduct.price ? 'disabled' : ''}`}
+                      onClick={() => handlePurchase(selectedProduct, stockItem, index)}
+                      disabled={userBalance < selectedProduct.price}
+                    >
+                      {userBalance >= selectedProduct.price ? 'Buy Now' : 'Insufficient Funds'}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -304,6 +396,7 @@ function WalletPage({ balance, updateUserBalance }) {
           <button className="recharge-btn" onClick={() => handleAddFunds(10)}>Add $10</button>
           <button className="recharge-btn" onClick={() => handleAddFunds(25)}>Add $25</button>
           <button className="recharge-btn" onClick={() => handleAddFunds(50)}>Add $50</button>
+          <button className="recharge-btn" onClick={() => handleAddFunds(100)}>Add $100</button>
         </div>
       </div>
 
@@ -323,255 +416,62 @@ function WalletPage({ balance, updateUserBalance }) {
   );
 }
 
-function ChatPage({ user }) {
-  const [messages, setMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [userProfiles, setUserProfiles] = useState({});
-  const [onlineUsers, setOnlineUsers] = useState(98);
-  const messagesEndRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }
+function PurchasesPage({ user }) {
+  const [purchases, setPurchases] = useState([]);
 
   useEffect(() => {
-    // Add some demo messages to match the design
-    const demoMessages = [
-      {
-        id: 1,
-        text: "whats ur discord",
-        userId: "demo1",
-        userEmail: "man2ukas@demo.com",
-        timestamp: new Date().toISOString(),
-        type: "user",
-        avatar: "👤",
-        username: "man2ukas"
-      },
-      {
-        id: 2,
-        type: "system",
-        timestamp: new Date().toISOString(),
-        messages: [
-          "@Viljovehka, @sewtrix, @Valtsoo, @TopRich, @AdoyStupidGuy won 10 💰 each for participating in chat rain!",
-          "@Laesss, @8nikos8, @Zorotheracist, @droplugt2, @berkens69 won 10 💰 each for participating in chat rain!"
-        ]
-      },
-      {
-        id: 3,
-        text: "When will the slots work",
-        userId: "demo3",
-        userEmail: "s4monage@demo.com",
-        timestamp: new Date().toISOString(),
-        type: "user",
-        avatar: "🎮",
-        username: "s4monage",
-        level: 54
-      }
-    ];
-
-    setMessages(demoMessages);
-
-    // Listen to chat messages from Firebase
-    const messagesRef = ref(db, 'chat/messages');
-    onValue(messagesRef, (snapshot) => {
-      if (snapshot.exists()) {
-        const messagesData = snapshot.val();
-        const messagesArray = Object.entries(messagesData).map(([key, value]) => ({
-          id: key,
-          ...value,
-          type: "user"
-        })).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-        setMessages(prev => [...demoMessages, ...messagesArray]);
-      }
-    });
-
-    // Listen to user profiles
-    const profilesRef = ref(db, 'userProfiles');
-    onValue(profilesRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setUserProfiles(snapshot.val());
-      }
-    });
-
-    // Track online users
     if (user) {
-      const onlineRef = ref(db, `chat/online/${user.uid}`);
-      const onlineUsersRef = ref(db, 'chat/online');
-
-      // Set user as online
-      set(onlineRef, {
-        email: user.email,
-        timestamp: new Date().toISOString()
-      }).catch(error => {
-        console.error("Error setting user online:", error);
-      });
-
-      // Listen to online users count
-      const unsubscribeOnline = onValue(onlineUsersRef, (snapshot) => {
+      const purchasesRef = ref(db, `users/${user.uid}/purchases`);
+      onValue(purchasesRef, (snapshot) => {
         if (snapshot.exists()) {
-          const onlineData = snapshot.val();
-          const now = new Date().getTime();
-          const activeUsers = Object.values(onlineData).filter(userData => {
-            const userTime = new Date(userData.timestamp).getTime();
-            return (now - userTime) < 60000;
-          });
-          setOnlineUsers(Math.max(1, activeUsers.length));
+          const purchasesData = snapshot.val();
+          const purchasesArray = Object.entries(purchasesData).map(([key, value]) => ({
+            id: key,
+            ...value
+          })).sort((a, b) => new Date(b.purchaseDate) - new Date(a.purchaseDate));
+          setPurchases(purchasesArray);
         } else {
-          setOnlineUsers(1);
+          setPurchases([]);
         }
-      }, (error) => {
-        console.error("Error listening to online users:", error);
-        setOnlineUsers(1);
       });
-
-      // Update user activity every 30 seconds
-      const activityInterval = setInterval(() => {
-        set(onlineRef, {
-          email: user.email,
-          timestamp: new Date().toISOString()
-        }).catch(error => {
-          console.error("Error updating user activity:", error);
-        });
-      }, 30000);
-
-      // Cleanup on unmount
-      return () => {
-        unsubscribeOnline();
-        clearInterval(activityInterval);
-        set(onlineRef, null).catch(error => {
-          console.error("Error removing user from online list:", error);
-        });
-      };
     }
   }, [user]);
 
-  useEffect(() => {
-    scrollToBottom()
-  }, [messages]);
+  return (
+    <div className="page-card">
+      <h1 className="page-title">My Purchases</h1>
 
-  const sendMessage = async () => {
-    if (newMessage.trim() && user) {
-      try {
-        const messageRef = ref(db, `chat/messages/${Date.now()}`);
-        await set(messageRef, {
-          text: newMessage,
-          userId: user.uid,
-          userEmail: user.email,
-          timestamp: new Date().toISOString()
-        });
-        setNewMessage('');
-      } catch (error) {
-        console.error("Error sending message:", error);
-        alert("Failed to send message. Please try again.");
-      }
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
-  const getUserDisplayName = (userId, userEmail) => {
-    const profile = userProfiles[userId];
-    return profile?.displayName || userEmail.split('@')[0];
-  };
-
-  const getUserAvatar = (userId, userEmail) => {
-    const profile = userProfiles[userId];
-    return profile?.avatar || userEmail.charAt(0).toUpperCase();
-  };
-
-  const renderMessage = (message) => {
-    if (message.type === "system") {
-      return (
-        <div key={message.id} className="system-message">
-          <div className="system-header">
-            SYSTEM
-            <span className="system-time">{new Date(message.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-          </div>
-          {message.messages.map((msg, index) => (
-            <div key={index} className="system-content">
-              <p dangerouslySetInnerHTML={{
-                __html: msg.replace(/@(\w+)/g, '<span class="username-mention">@$1</span>')
-              }} />
+      {purchases.length === 0 ? (
+        <div className="no-purchases">
+          <div className="empty-icon">🛍️</div>
+          <p>No purchases yet. Visit the store to buy some games!</p>
+        </div>
+      ) : (
+        <div className="purchases-list">
+          {purchases.map((purchase) => (
+            <div key={purchase.id} className="purchase-item">
+              <div className="purchase-info">
+                <h4>{purchase.productName}</h4>
+                <div className="purchase-details">
+                  <p><strong>Code:</strong> {purchase.stockData.code}</p>
+                  <p><strong>Data:</strong> {purchase.stockData.data}</p>
+                  <p><strong>Price:</strong> ${purchase.price}</p>
+                  <p><strong>Date:</strong> {new Date(purchase.purchaseDate).toLocaleDateString()}</p>
+                </div>
+              </div>
+              <button 
+                className="copy-code-btn"
+                onClick={() => {
+                  navigator.clipboard.writeText(purchase.stockData.code);
+                  alert('Code copied to clipboard!');
+                }}
+              >
+                Copy Code
+              </button>
             </div>
           ))}
         </div>
-      );
-    }
-
-    const isOwn = message.userId === user?.uid;
-    const displayName = message.username || getUserDisplayName(message.userId, message.userEmail);
-    const avatar = message.avatar || getUserAvatar(message.userId, message.userEmail);
-
-    return (
-      <div key={message.id} className={`message ${isOwn ? 'own-message' : ''}`}>
-        <div className="message-avatar">
-          {avatar}
-        </div>
-        <div className="message-content">
-          <div className="message-header">
-            <span className="message-author">{displayName}</span>
-            {message.level && (
-              <span className="user-level">LVL {message.level}</span>
-            )}
-            <span className="message-time">{new Date(message.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
-          </div>
-          <div className="message-text">{message.text}</div>
-        </div>
-      </div>
-    );
-  };
-
-  return (
-    <div className="chat-container">
-      <div className="chat-messages">
-        {messages.length === 0 ? (
-          <div className="no-messages">
-            <div className="chat-icon">💬</div>
-            <p>No messages yet. Start the conversation!</p>
-          </div>
-        ) : (
-          messages.map(renderMessage)
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      <div className="chat-input-container">
-        <form className="chat-input-form" onSubmit={(e) => { e.preventDefault(); sendMessage(); }}>
-          <input
-            className="chat-input"
-            placeholder="Say something"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyPress={handleKeyPress}
-          />
-          <button type="button" className="emoji-btn">
-            😊
-          </button>
-        </form>
-
-        <div className="chat-footer">
-          <div className="online-status">
-            <span className="online-dot">●</span>
-            <span>{onlineUsers} <strong>online</strong></span>
-          </div>
-          <div className="chat-controls">
-            <span>150</span>
-            <button className="menu-btn">☰</button>
-            <button 
-              className="send-button"
-              onClick={sendMessage}
-              disabled={!newMessage.trim()}
-            >
-              Send
-            </button>
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -582,9 +482,9 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
     price: '',
     image: '🎮',
     category: '',
-    code: '',
-    stock: ''
+    stockData: []
   });
+  const [newStockItem, setNewStockItem] = useState({ code: '', data: '' });
 
   const generateRandomCode = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -596,28 +496,64 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
     return result;
   };
 
+  const addStockItem = () => {
+    if (newStockItem.code && newStockItem.data) {
+      setNewProduct({
+        ...newProduct,
+        stockData: [...newProduct.stockData, { ...newStockItem }]
+      });
+      setNewStockItem({ code: '', data: '' });
+    } else {
+      alert('Please fill in both code and data for the stock item');
+    }
+  };
+
+  const removeStockItem = (index) => {
+    const updatedStockData = newProduct.stockData.filter((_, i) => i !== index);
+    setNewProduct({ ...newProduct, stockData: updatedStockData });
+  };
+
   const handleAddProduct = async () => {
-    if (newProduct.name && newProduct.price && newProduct.category && newProduct.code && newProduct.stock) {
+    if (newProduct.name && newProduct.price && newProduct.category && newProduct.stockData.length > 0) {
       const product = {
         id: Date.now(),
         name: newProduct.name,
         price: parseFloat(newProduct.price),
         image: newProduct.image,
         category: newProduct.category,
-        code: newProduct.code,
-        stock: parseInt(newProduct.stock)
+        stockData: newProduct.stockData
       };
       await addProduct(product);
-      setNewProduct({ name: '', price: '', image: '🎮', category: '', code: '', stock: '' });
+      setNewProduct({ name: '', price: '', image: '🎮', category: '', stockData: [] });
       alert('Product added successfully!');
     } else {
-      alert('Please fill in all fields including stock quantity');
+      alert('Please fill in all fields and add at least one stock item');
     }
   };
 
   const handleDeleteProduct = async (id) => {
-    await deleteProduct(id);
-    alert('Product deleted successfully!');
+    if (confirm('Are you sure you want to delete this product?')) {
+      await deleteProduct(id);
+      alert('Product deleted successfully!');
+    }
+  };
+
+  const addStockToExistingProduct = async (productId, stockItem) => {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+      const newStockData = [...(product.stockData || []), stockItem];
+      await updateProductStock(productId, newStockData);
+      alert('Stock added successfully!');
+    }
+  };
+
+  const removeStockFromProduct = async (productId, stockIndex) => {
+    const product = products.find(p => p.id === productId);
+    if (product && product.stockData) {
+      const newStockData = product.stockData.filter((_, index) => index !== stockIndex);
+      await updateProductStock(productId, newStockData);
+      alert('Stock removed successfully!');
+    }
   };
 
   return (
@@ -648,29 +584,6 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
             onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
             className="admin-input"
           />
-          <input
-            type="number"
-            placeholder="Stock Quantity"
-            value={newProduct.stock}
-            onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
-            className="admin-input"
-          />
-          <div className="code-input-group">
-            <input
-              type="text"
-              placeholder="Activation Code"
-              value={newProduct.code}
-              onChange={(e) => setNewProduct({...newProduct, code: e.target.value})}
-              className="admin-input"
-            />
-            <button 
-              type="button"
-              className="generate-code-btn"
-              onClick={() => setNewProduct({...newProduct, code: generateRandomCode()})}
-            >
-              Generate
-            </button>
-          </div>
           <select 
             value={newProduct.image}
             onChange={(e) => setNewProduct({...newProduct, image: e.target.value})}
@@ -683,6 +596,55 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
             <option value="🏎️">🏎️</option>
             <option value="👾">👾</option>
           </select>
+
+          <div className="stock-section">
+            <h3>Add Stock Items</h3>
+            <div className="stock-input-group">
+              <input
+                type="text"
+                placeholder="Product Code"
+                value={newStockItem.code}
+                onChange={(e) => setNewStockItem({...newStockItem, code: e.target.value})}
+                className="admin-input"
+              />
+              <button 
+                type="button"
+                className="generate-code-btn"
+                onClick={() => setNewStockItem({...newStockItem, code: generateRandomCode()})}
+              >
+                Generate
+              </button>
+            </div>
+            <input
+              type="text"
+              placeholder="Stock Data (e.g., Premium Edition Key)"
+              value={newStockItem.data}
+              onChange={(e) => setNewStockItem({...newStockItem, data: e.target.value})}
+              className="admin-input"
+            />
+            <button className="admin-btn-secondary" onClick={addStockItem}>Add Stock Item</button>
+
+            {newProduct.stockData.length > 0 && (
+              <div className="codes-preview">
+                <h4>Stock Items ({newProduct.stockData.length})</h4>
+                {newProduct.stockData.map((item, index) => (
+                  <div key={index} className="code-preview-item">
+                    <div>
+                      <div className="code-key">{item.code}</div>
+                      <div className="code-preview-info">{item.data}</div>
+                    </div>
+                    <button 
+                      className="remove-code-btn"
+                      onClick={() => removeStockItem(index)}
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <button className="admin-btn" onClick={handleAddProduct}>Add Product</button>
         </div>
       </div>
@@ -693,33 +655,54 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
           {products.map(product => (
             <div key={product.id} className="admin-product-card">
               <div className="admin-product-info">
-                <span>{product.image} {product.name} - ${product.price}</span>
-                <div className="admin-stock-info">
-                  Stock: <span className={`stock-count ${product.stock <= 5 ? 'low-stock' : ''}`}>
-                    {product.stock || 0}
-                  </span>
+                <div>
+                  <span>{product.image} {product.name} - ${product.price}</span>
+                  <div className="admin-stock-info">
+                    Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
+                      {product.stockData ? product.stockData.length : 0} items
+                    </span>
+                  </div>
                 </div>
+
+                {product.stockData && product.stockData.length > 0 && (
+                  <div className="codes-info">
+                    <h4>Stock Items:</h4>
+                    {product.stockData.map((stockItem, index) => (
+                      <div key={index} className="code-stock-item">
+                        <div className="code-details">
+                          <div className="code-key">{stockItem.code}</div>
+                          <div className="code-data">{stockItem.data}</div>
+                        </div>
+                        <button 
+                          className="remove-code-btn"
+                          onClick={() => removeStockFromProduct(product.id, index)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
+
               <div className="admin-product-actions">
-                <div className="stock-controls">
-                  <button 
-                    className="stock-btn"
-                    onClick={() => updateProductStock(product.id, Math.max(0, product.stock - 1))}
-                  >
-                    -
-                  </button>
-                  <button 
-                    className="stock-btn"
-                    onClick={() => updateProductStock(product.id, product.stock + 1)}
-                  >
-                    +
-                  </button>
-                </div>
+                <button 
+                  className="admin-btn-secondary"
+                  onClick={() => {
+                    const code = prompt("Enter product code:");
+                    const data = prompt("Enter stock data:");
+                    if (code && data) {
+                      addStockToExistingProduct(product.id, { code, data });
+                    }
+                  }}
+                >
+                  Add Stock
+                </button>
                 <button 
                   className="delete-btn"
                   onClick={() => handleDeleteProduct(product.id)}
                 >
-                  Delete
+                  Delete Product
                 </button>
               </div>
             </div>
@@ -729,172 +712,11 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock }) 
     </div>
   );
 }
-
 function ProfilePage({ user }) {
-  const [purchases, setPurchases] = useState([]);
-  const [profile, setProfile] = useState({ displayName: '', avatar: '', bio: '' });
-  const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState({ displayName: '', avatar: '', bio: '' });
-
-  const getInitial = (email) => email.charAt(0).toUpperCase();
-
-  const avatarOptions = ['😀', '😎', '🤓', '🎮', '🎯', '⚡', '🔥', '💎', '🚀', '⭐'];
-
-  useEffect(() => {
-    if (user) {
-      // Load purchases
-      const purchasesRef = ref(db, `users/${user.uid}/purchases`);
-      onValue(purchasesRef, (snapshot) => {
-        if (snapshot.exists()) {
-          const purchasesData = snapshot.val();
-          const purchasesArray = Object.values(purchasesData);
-          setPurchases(purchasesArray);
-        } else {
-          setPurchases([]);
-        }
-      });
-
-      // Load user profile
-      const profileRef = ref(db, `userProfiles/${user.uid}`);
-      onValue(profileRef, (snapshot) => {
-        if (snapshot.exists()) {
-          const profileData = snapshot.val();
-          setProfile(profileData);
-          setEditForm(profileData);
-        } else {
-          // Create default profile
-          const defaultProfile = {
-            displayName: user.email.split('@')[0],
-            avatar: getInitial(user.email),
-            bio: 'Gaming enthusiast'
-          };
-          setProfile(defaultProfile);
-          setEditForm(defaultProfile);
-        }
-      });
-    }
-  }, [user]);
-
-  const saveProfile = async () => {
-    if (user) {
-      const profileRef = ref(db, `userProfiles/${user.uid}`);
-      await set(profileRef, editForm);
-      setIsEditing(false);
-      alert('Profile updated successfully!');
-    }
-  };
-
   return (
-    <div className="page-card">
-      <h1 className="page-title">My Profile</h1>
-
-      <div className="profile-info">
-        <div className="profile-avatar">
-          {profile.avatar}
-        </div>
-        <div className="profile-details">
-          <h3>{profile.displayName}</h3>
-          <p>{user.email}</p>
-          <p className="profile-bio">{profile.bio}</p>
-          <button 
-            className="edit-profile-btn"
-            onClick={() => setIsEditing(!isEditing)}
-          >
-            {isEditing ? 'Cancel' : 'Edit Profile'}
-          </button>
-        </div>
-      </div>
-
-      {isEditing && (
-        <div className="edit-profile-section">
-          <h3>Edit Profile</h3>
-          <div className="edit-form">
-            <div className="form-group">
-              <label>Display Name:</label>
-              <input
-                type="text"
-                value={editForm.displayName}
-                onChange={(e) => setEditForm({...editForm, displayName: e.target.value})}
-                className="profile-input"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Avatar:</label>
-              <div className="avatar-selection">
-                {avatarOptions.map(avatar => (
-                  <button
-                    key={avatar}
-                    className={`avatar-option ${editForm.avatar === avatar ? 'selected' : ''}`}
-                    onClick={() => setEditForm({...editForm, avatar})}
-                  >
-                    {avatar}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label>Bio:</label>
-              <textarea
-                value={editForm.bio}
-                onChange={(e) => setEditForm({...editForm, bio: e.target.value})}
-                className="profile-textarea"
-                placeholder="Tell us about yourself..."
-                rows="3"
-              />
-            </div>
-
-            <button className="save-profile-btn" onClick={saveProfile}>
-              Save Changes
-            </button>
-          </div>
-        </div>
-      )}
-
-      {purchases.length > 0 && (
-        <div className="purchases-section">
-          <h2>My Game Library</h2>
-          <div className="purchases-list">
-            {purchases.map((purchase, index) => (
-                <div key={index} className="purchase-item">
-                  <div className="purchase-info">
-                    <h4>Game Code: {purchase.code}</h4>
-                    <p className="purchase-data">Data: {purchase.data}</p>
-                    <p>Purchased: {new Date(purchase.purchaseDate).toLocaleDateString()}</p>
-                  </div>
-                  <button 
-                    className="copy-code-btn"
-                    onClick={() => {
-                      navigator.clipboard.writeText(purchase.code);
-                      alert('Code copied to clipboard!');
-                    }}
-                  >
-                    Copy Code
-                  </button>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-
-      <div className="feature-grid">
-        <div className="feature-card">
-          <div className="feature-icon">🛍️</div>
-          <h3>Purchase History</h3>
-          <p>View your game library and past purchases</p>
-        </div>
-        <div className="feature-card">
-          <div className="feature-icon">⚙️</div>
-          <h3>Account Settings</h3>
-          <p>Manage your preferences and security</p>
-        </div>
-        <div className="feature-card">
-          <div className="feature-icon">🏅</div>
-          <h3>Achievements</h3>
-          <p>Track your gaming milestones and badges</p>
-        </div>
-      </div>
+    <div>
+      <h1>My Profile</h1>
+      <p>Coming soon...</p>
     </div>
   );
 }
