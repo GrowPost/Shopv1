@@ -626,6 +626,28 @@ body {
   transform: translateY(-2px);
 }
 
+/* Empty Store */
+.empty-store {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6B6B6B;
+}
+
+.empty-store .empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+.empty-store h3 {
+  color: #A0A0A0;
+  margin-bottom: 15px;
+}
+
+.empty-store p {
+  color: #6B6B6B;
+}
+
 /* Purchases Page */
 .no-purchases {
   text-align: center;

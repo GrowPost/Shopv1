@@ -87,6 +87,8 @@ export default function App() {
       // Check if user is admin
       if (u && u.email === "admin@gamestore.com") {
         setIsAdmin(true);
+      } else {
+        setIsAdmin(false);
       }
       if (u) {
         createUserProfile(u);
@@ -298,17 +300,30 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
 
   const handlePurchase = async (product, stockItem, stockIndex) => {
     try {
+      if (!user) {
+        alert("Please log in to make a purchase.");
+        return;
+      }
+
+      if (!product.stockData || product.stockData.length === 0) {
+        alert("This product is out of stock!");
+        return;
+      }
+
       if (userBalance >= product.price) {
         const newBalance = userBalance - product.price;
 
         // Remove purchased stock item
         const newStockData = product.stockData.filter((_, index) => index !== stockIndex);
 
-        await updateUserBalance(newBalance);
-        await updateProductStock(product.id, newStockData);
-        await addPurchase(user.uid, product.id, product.name, product.price, stockItem);
+        // Update all data in sequence
+        await Promise.all([
+          updateUserBalance(newBalance),
+          updateProductStock(product.id, newStockData),
+          addPurchase(user.uid, product.id, product.name, product.price, stockItem)
+        ]);
 
-        // Show success dialog instead of alert
+        // Show success dialog
         setPurchaseDetails({
           productName: product.name,
           code: stockItem.code,
