@@ -216,10 +216,11 @@ export default function App() {
         </div>
         <div className="wallet-section">
           <div className="balance-display-header">
-            💰 ${userBalance.toFixed(2)}
+            <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px', marginRight: '4px'}} />
+            {userBalance.toFixed(2)}
           </div>
           <button className="wallet-btn" onClick={() => setPage("wallet")}>
-            💳
+            <img src="/IMG_1859.png" alt="Wallet" style={{width: '16px', height: '16px'}} />
           </button>
         </div>
         <div className="profile-section">

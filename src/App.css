@@ -293,20 +293,23 @@ body {
 .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
+  gap: 15px;
   margin-top: 30px;
   padding: 0 10px;
+  max-width: 1200px;
+  margin: 30px auto 0 auto;
 }
 
 .product-card {
   background: linear-gradient(145deg, #1A1F2E, #1E2233);
   border: 1px solid #2A2F3E;
-  border-radius: 16px;
-  padding: 24px;
+  border-radius: 12px;
+  padding: 16px;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   cursor: pointer;
-  min-height: 260px;
+  height: 280px;
+  max-width: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -338,13 +341,13 @@ body {
 }
 
 .product-image {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 20px auto;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 12px auto;
   display: block;
-  border-radius: 12px;
+  border-radius: 8px;
   object-fit: cover;
-  border: 3px solid #2A2F3E;
+  border: 2px solid #2A2F3E;
   transition: all 0.4s ease;
   background: linear-gradient(135deg, #2A2F3E, #1E2233);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -354,17 +357,17 @@ body {
 
 .product-card:hover .product-image {
   border-color: #3B7AFD;
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0 8px 20px rgba(59, 122, 253, 0.3);
 }
 
 .product-name {
-  font-size: 1.3rem;
-  margin-bottom: 15px;
+  font-size: 1rem;
+  margin-bottom: 8px;
   color: white;
   font-weight: 700;
-  line-height: 1.4;
-  min-height: 2.8rem;
+  line-height: 1.3;
+  min-height: 2.6rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -375,8 +378,8 @@ body {
 
 .product-category {
   color: #A0A0A0;
-  margin-bottom: 15px;
-  font-size: 0.9rem;
+  margin-bottom: 8px;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 500;
@@ -385,18 +388,18 @@ body {
 }
 
 .product-price {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   font-weight: 800;
   color: #3B7AFD;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
   text-shadow: 0 2px 8px rgba(59, 122, 253, 0.4);
   position: relative;
   z-index: 1;
 }
 
 .product-stock {
-  margin: 15px 0;
-  font-size: 0.95rem;
+  margin: 8px 0;
+  font-size: 0.85rem;
   color: #A0A0A0;
   position: relative;
   z-index: 1;
@@ -415,13 +418,13 @@ body {
   background: linear-gradient(135deg, #1F5CEB 0%, #3B7AFD 50%, #5A8FFF 100%);
   color: white;
   border: none;
-  padding: 14px 20px;
-  border-radius: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   width: 100%;
-  font-size: 16px;
+  font-size: 13px;
   margin-top: auto;
   position: relative;
   z-index: 1;
@@ -1203,32 +1206,33 @@ body {
 
   .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+    gap: 10px;
     padding: 0 5px;
   }
 
   .product-card {
-    padding: 18px;
-    min-height: 240px;
+    padding: 14px;
+    height: 250px;
+    max-width: none;
   }
 
   .product-image {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
   }
 
   .product-name {
-    font-size: 1.1rem;
-    min-height: 2.4rem;
+    font-size: 0.9rem;
+    min-height: 2.2rem;
   }
 
   .product-price {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
 
   .buy-btn {
-    padding: 12px 16px;
-    font-size: 14px;
+    padding: 8px 12px;
+    font-size: 12px;
   }
 
   .add-funds-buttons {
