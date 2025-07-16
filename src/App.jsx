@@ -386,7 +386,7 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                 disabled={userBalance < product.price || !product.stockData || product.stockData.length === 0}
               >
                 {!product.stockData || product.stockData.length === 0 ? 'Out of Stock' : 
-                 userBalance >= product.price ? 'View Details' : 'Insufficient Funds'}
+                 userBalance >= product.price ? 'Buy' : 'Insufficient Funds'}
               </button>
             </div>
           ))}
