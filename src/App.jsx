@@ -537,7 +537,7 @@ function WalletPage({ balance, user }) {
         </div>
       </div>
 
-      <div className="wallet-features"></div>
+      <div className="wallet-features">
         <h2 className="section-title">Wallet Features</h2>
         <div className="feature-grid">
           <div className="feature-card">
