@@ -518,7 +518,26 @@ function WalletPage({ balance, user }) {
     <div className="page-card">
       <h1 className="page-title">💰 My Wallet</h1>
 
-      <div className="wallet-features">
+      <div className="user-uid-section">
+        <h2 className="section-title">Your User ID</h2>
+        <div className="uid-display">
+          <span className="uid-label">UID:</span>
+          <span className="uid-value">{user?.uid || 'Not available'}</span>
+          <button 
+            className="copy-uid-btn"
+            onClick={() => {
+              if (user?.uid) {
+                navigator.clipboard.writeText(user.uid);
+                alert('UID copied to clipboard!');
+              }
+            }}
+          >
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <div className="wallet-features"></div>
         <h2 className="section-title">Wallet Features</h2>
         <div className="feature-grid">
           <div className="feature-card">

@@ -1298,6 +1298,38 @@ body {
   color: white;
 }
 
+.user-uid-section {
+  background: #12151E;
+  border: 1px solid #2A2F3E;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 30px;
+}
+
+.uid-display {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1E2233;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #2A2F3E;
+}
+
+.uid-label {
+  color: #3B7AFD;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.uid-value {
+  color: white;
+  font-family: monospace;
+  font-weight: 500;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
 .user-details {
   display: flex;
   gap: 15px;
