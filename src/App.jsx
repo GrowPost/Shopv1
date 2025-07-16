@@ -285,6 +285,8 @@ export default function App() {
 
 function HomePage({ products, userBalance, updateUserBalance, user, addPurchase, updateProductStock }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
+  const [purchaseDetails, setPurchaseDetails] = useState(null);
 
   const handleProductClick = (product) => {
     if (product.stockData && product.stockData.length > 0) {
@@ -295,20 +297,32 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
   };
 
   const handlePurchase = async (product, stockItem, stockIndex) => {
-    if (userBalance >= product.price) {
-      const newBalance = userBalance - product.price;
+    try {
+      if (userBalance >= product.price) {
+        const newBalance = userBalance - product.price;
 
-      // Remove purchased stock item
-      const newStockData = product.stockData.filter((_, index) => index !== stockIndex);
+        // Remove purchased stock item
+        const newStockData = product.stockData.filter((_, index) => index !== stockIndex);
 
-      await updateUserBalance(newBalance);
-      await updateProductStock(product.id, newStockData);
-      await addPurchase(user.uid, product.id, product.name, product.price, stockItem);
+        await updateUserBalance(newBalance);
+        await updateProductStock(product.id, newStockData);
+        await addPurchase(user.uid, product.id, product.name, product.price, stockItem);
 
-      alert(`Successfully purchased ${product.name}!\n\nCode: ${stockItem.code}\nData: ${stockItem.data}\n\nThis has been saved to your purchases.`);
-      setSelectedProduct(null);
-    } else {
-      alert("Insufficient balance! Please add funds to your wallet.");
+        // Show success dialog instead of alert
+        setPurchaseDetails({
+          productName: product.name,
+          code: stockItem.code,
+          data: stockItem.data,
+          price: product.price
+        });
+        setShowSuccessDialog(true);
+        setSelectedProduct(null);
+      } else {
+        alert("Insufficient balance! Please add funds to your wallet.");
+      }
+    } catch (error) {
+      console.error("Purchase error:", error);
+      alert("Purchase failed. Please try again.");
     }
   };
 
@@ -316,32 +330,40 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
     <div className="page-card">
       <h1 className="page-title">Game Store</h1>
 
-      <div className="products-grid">
-        {products.map(product => (
-          <div key={product.id} className="product-card" onClick={() => handleProductClick(product)}>
-            <div className="product-image">{product.image}</div>
-            <h3 className="product-name">{product.name}</h3>
-            <p className="product-category">{product.category}</p>
-            <div className="product-price">${product.price}</div>
-            <div className="product-stock">
-              Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
-                {product.stockData ? product.stockData.length : 0}
-              </span>
+      {products.length === 0 ? (
+        <div className="empty-store">
+          <div className="empty-icon">🎮</div>
+          <h3>No Products Available</h3>
+          <p>The store is currently empty. Check back later for new games!</p>
+        </div>
+      ) : (
+        <div className="products-grid">
+          {products.map(product => (
+            <div key={product.id} className="product-card" onClick={() => handleProductClick(product)}>
+              <div className="product-image">{product.image}</div>
+              <h3 className="product-name">{product.name}</h3>
+              <p className="product-category">{product.category}</p>
+              <div className="product-price">${product.price}</div>
+              <div className="product-stock">
+                Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
+                  {product.stockData ? product.stockData.length : 0}
+                </span>
+              </div>
+              <button 
+                className={`buy-btn ${userBalance < product.price || !product.stockData || product.stockData.length === 0 ? 'disabled' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleProductClick(product);
+                }}
+                disabled={userBalance < product.price || !product.stockData || product.stockData.length === 0}
+              >
+                {!product.stockData || product.stockData.length === 0 ? 'Out of Stock' : 
+                 userBalance >= product.price ? 'View Details' : 'Insufficient Funds'}
+              </button>
             </div>
-            <button 
-              className={`buy-btn ${userBalance < product.price || !product.stockData || product.stockData.length === 0 ? 'disabled' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleProductClick(product);
-              }}
-              disabled={userBalance < product.price || !product.stockData || product.stockData.length === 0}
-            >
-              {!product.stockData || product.stockData.length === 0 ? 'Out of Stock' : 
-               userBalance >= product.price ? 'View Details' : 'Insufficient Funds'}
-            </button>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {selectedProduct && (
         <div className="purchase-dialog-overlay" onClick={() => setSelectedProduct(null)}>
@@ -366,6 +388,49 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                   disabled={userBalance < selectedProduct.price || !selectedProduct.stockData || selectedProduct.stockData.length === 0}
                 >
                   {userBalance >= selectedProduct.price ? `Buy for $${selectedProduct.price}` : 'Insufficient Funds'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showSuccessDialog && purchaseDetails && (
+        <div className="purchase-dialog-overlay" onClick={() => setShowSuccessDialog(false)}>
+          <div className="success-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="dialog-header">
+              <h3>🎉 Purchase Successful!</h3>
+              <button className="close-btn" onClick={() => setShowSuccessDialog(false)}>×</button>
+            </div>
+            <div className="dialog-content">
+              <div className="success-info">
+                <h4>{purchaseDetails.productName}</h4>
+                <p className="purchase-price">Paid: ${purchaseDetails.price}</p>
+                <div className="product-details">
+                  <div className="detail-item">
+                    <strong>Product Code:</strong>
+                    <div className="code-display">{purchaseDetails.code}</div>
+                    <button 
+                      className="copy-btn"
+                      onClick={() => {
+                        navigator.clipboard.writeText(purchaseDetails.code);
+                        alert('Code copied to clipboard!');
+                      }}
+                    >
+                      Copy Code
+                    </button>
+                  </div>
+                  <div className="detail-item">
+                    <strong>Product Data:</strong>
+                    <div className="data-display">{purchaseDetails.data}</div>
+                  </div>
+                </div>
+                <p className="success-note">Your purchase has been saved to your purchase history.</p>
+                <button 
+                  className="success-btn"
+                  onClick={() => setShowSuccessDialog(false)}
+                >
+                  Continue Shopping
                 </button>
               </div>
             </div>
