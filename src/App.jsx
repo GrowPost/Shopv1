@@ -208,9 +208,8 @@ export default function App() {
         <div className="loading-content">
           <div className="loading-spinner"></div>
           <div className="loading-logo">
-            <span className="logo-g">Game</span>
-            <span>🎮</span>
-            <span className="logo-d">Store</span>
+            <span className="logo-g">Grow4</span>
+            <span className="logo-d">Bot</span>
           </div>
           <p className="loading-text">Loading...</p>
         </div>
@@ -222,7 +221,7 @@ export default function App() {
     return (
       <div className="auth-container">
         <div className="auth-card">
-          <h2 className="auth-title">Game Store</h2>
+          <h2 className="auth-title">Grow4Bot</h2>
           <input
             className="auth-input"
             placeholder="Email"
@@ -263,9 +262,8 @@ export default function App() {
     <div className="main-container">
       <header className="header">
         <div className="logo">
-          <span className="logo-g">Game</span>
-          <span>🎮</span>
-          <span className="logo-d">Store</span>
+          <span className="logo-g">Grow4</span>
+          <span className="logo-d">Bot</span>
         </div>
         <div className="wallet-section">
           <div className="balance-display-header">
@@ -397,13 +395,13 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
 
   return (
     <div className="page-card">
-      <h1 className="page-title">Game Store</h1>
+      <h1 className="page-title">Grow4Bot</h1>
 
       {products.length === 0 ? (
         <div className="empty-store">
           <div className="empty-icon">🎮</div>
           <h3>No Products Available</h3>
-          <p>The store is currently empty. Check back later for new games!</p>
+          <p>The store is currently empty. Check back later for new items!</p>
         </div>
       ) : (
         <div className="products-grid">
@@ -635,7 +633,7 @@ function PurchasesPage({ user }) {
         <div className="no-purchases">
           <div className="empty-icon">🛍️</div>
           <h3>No Purchases Yet</h3>
-          <p>Visit the store to buy some amazing games!</p>
+          <p>Visit the store to buy some amazing items!</p>
         </div>
       ) : (
         <>
