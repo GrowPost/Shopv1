@@ -590,6 +590,7 @@ function WalletPage({ balance, user }) {
 
 function PurchasesPage({ user }) {
   const [purchases, setPurchases] = useState([]);
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
     if (user) {
@@ -607,7 +608,22 @@ function PurchasesPage({ user }) {
         }
       });
     }
+
+    // Load products to get images
+    const productsRef = ref(db, 'products');
+    onValue(productsRef, (snapshot) => {
+      if (snapshot.exists()) {
+        const productsData = snapshot.val();
+        const productsArray = Object.values(productsData);
+        setProducts(productsArray);
+      }
+    });
   }, [user]);
+
+  const getProductImage = (productId, productName) => {
+    const product = products.find(p => p.id === productId || p.name === productName);
+    return product?.image || null;
+  };
 
   const totalSpent = purchases.reduce((sum, purchase) => sum + purchase.price, 0);
   const thisMonth = new Date().getMonth();
@@ -651,68 +667,77 @@ function PurchasesPage({ user }) {
           </div>
 
           <div className="purchases-list">
-            {purchases.map((purchase) => (
-              <div key={purchase.id} className="purchase-item">
-                <div className="purchase-info">
-                  <h4>{purchase.productName}</h4>
-                  <div className="purchase-details">
-                    <div className="purchase-detail-row">
-                      <p>
-                        <strong>Code:</strong>
-                        <span 
-                          className="purchase-code"
-                          onClick={() => {
-                            navigator.clipboard.writeText(purchase.stockData.code);
-                            alert('Code copied to clipboard!');
-                          }}
-                          title="Click to copy"
-                        >
-                          {purchase.stockData.code}
-                        </span>
-                      </p>
-                    </div>
-                    <div className="purchase-detail-row">
-                      <p>
-                        <strong>Data:</strong>
-                        <span className="purchase-data">{purchase.stockData.data}</span>
-                      </p>
-                    </div>
-                    <div className="purchase-detail-row purchase-price-row">
-                      <p>
-                        <strong>Price:</strong>
-                        <span style={{display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '10px'}}>
-                          <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
-                          <span style={{fontSize: '1.1rem', fontWeight: '800'}}>{purchase.price}</span>
-                        </span>
-                      </p>
-                    </div>
-                    <div className="purchase-detail-row purchase-date-row">
-                      <p>
-                        <strong>Date:</strong>
-                        <span style={{color: '#A0A0A0', marginLeft: '10px', fontWeight: '500'}}>
-                          {new Date(purchase.purchaseDate).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                          })}
-                        </span>
-                      </p>
+            {purchases.map((purchase) => {
+              const productImage = getProductImage(purchase.productId, purchase.productName);
+              
+              return (
+                <div key={purchase.id} className="purchase-item">
+                  <div className="purchase-header-section">
+                    <img 
+                      src={productImage} 
+                      alt={purchase.productName}
+                      className="purchase-product-image"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div className="purchase-product-fallback">🎮</div>
+                    <div className="purchase-header-info">
+                      <h4>{purchase.productName}</h4>
+                      <div className="purchase-price-display">
+                        <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
+                        {purchase.price}
+                      </div>
                     </div>
                   </div>
+
+                  <div className="purchase-details">
+                    <div className="purchase-detail-row">
+                      <span className="purchase-detail-label">Product Code</span>
+                      <div 
+                        className="purchase-code"
+                        onClick={() => {
+                          navigator.clipboard.writeText(purchase.stockData.code);
+                          alert('Code copied to clipboard!');
+                        }}
+                        title="Click to copy"
+                      >
+                        {purchase.stockData.code}
+                      </div>
+                    </div>
+                    
+                    <div className="purchase-detail-row">
+                      <span className="purchase-detail-label">Product Data</span>
+                      <div className="purchase-data">{purchase.stockData.data}</div>
+                    </div>
+                    
+                    <div className="purchase-detail-row">
+                      <span className="purchase-detail-label">Purchase Date</span>
+                      <div className="purchase-date-info">
+                        {new Date(purchase.purchaseDate).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button 
+                    className="copy-code-btn"
+                    onClick={() => {
+                      navigator.clipboard.writeText(purchase.stockData.code);
+                      alert('Code copied to clipboard!');
+                    }}
+                  >
+                    📋 Copy Code
+                  </button>
                 </div>
-                <button 
-                  className="copy-code-btn"
-                  onClick={() => {
-                    navigator.clipboard.writeText(purchase.stockData.code);
-                    alert('Code copied to clipboard!');
-                  }}
-                >
-                  📋 Copy Code
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </>
       )}
