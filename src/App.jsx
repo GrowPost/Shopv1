@@ -609,55 +609,112 @@ function PurchasesPage({ user }) {
     }
   }, [user]);
 
+  const totalSpent = purchases.reduce((sum, purchase) => sum + purchase.price, 0);
+  const thisMonth = new Date().getMonth();
+  const thisYear = new Date().getFullYear();
+  const thisMonthPurchases = purchases.filter(purchase => {
+    const purchaseDate = new Date(purchase.purchaseDate);
+    return purchaseDate.getMonth() === thisMonth && purchaseDate.getFullYear() === thisYear;
+  });
+
   return (
     <div className="page-card">
-      <h1 className="page-title">My Purchases</h1>
+      <h1 className="page-title">🛍️ My Purchases</h1>
 
       {purchases.length === 0 ? (
         <div className="no-purchases">
           <div className="empty-icon">🛍️</div>
-          <p>No purchases yet. Visit the store to buy some games!</p>
+          <h3>No Purchases Yet</h3>
+          <p>Visit the store to buy some amazing games!</p>
         </div>
       ) : (
-        <div className="purchases-list">
-          {purchases.map((purchase) => (
-            <div key={purchase.id} className="purchase-item">
-              <div className="purchase-info">
-                <h4>{purchase.productName}</h4>
-                <div className="purchase-details">
-                  <p>
-                    <strong>Code:</strong>
-                    <span className="purchase-code">{purchase.stockData.code}</span>
-                  </p>
-                  <p>
-                    <strong>Data:</strong>
-                    <span className="purchase-data">{purchase.stockData.data}</span>
-                  </p>
-                  <p>
-                    <strong>Price:</strong>
-                    <span style={{display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '8px'}}>
-                      <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
-                      <span style={{color: '#4CAF50', fontWeight: '600'}}>{purchase.price}</span>
-                    </span>
-                  </p>
-                  <p>
-                    <strong>Date:</strong>
-                    <span style={{color: '#A0A0A0', marginLeft: '8px'}}>{new Date(purchase.purchaseDate).toLocaleDateString()}</span>
-                  </p>
-                </div>
-              </div>
-              <button 
-                className="copy-code-btn"
-                onClick={() => {
-                  navigator.clipboard.writeText(purchase.stockData.code);
-                  alert('Code copied to clipboard!');
-                }}
-              >
-                Copy Code
-              </button>
+        <>
+          <div className="purchase-header">
+            <div className="purchases-count">
+              {purchases.length} Purchase{purchases.length !== 1 ? 's' : ''}
             </div>
-          ))}
-        </div>
+          </div>
+
+          <div className="purchases-stats">
+            <div className="stat-card">
+              <h3>{purchases.length}</h3>
+              <p>Total Games</p>
+            </div>
+            <div className="stat-card">
+              <h3>${totalSpent.toFixed(2)}</h3>
+              <p>Total Spent</p>
+            </div>
+            <div className="stat-card">
+              <h3>{thisMonthPurchases.length}</h3>
+              <p>This Month</p>
+            </div>
+          </div>
+
+          <div className="purchases-list">
+            {purchases.map((purchase) => (
+              <div key={purchase.id} className="purchase-item">
+                <div className="purchase-info">
+                  <h4>{purchase.productName}</h4>
+                  <div className="purchase-details">
+                    <div className="purchase-detail-row">
+                      <p>
+                        <strong>Code:</strong>
+                        <span 
+                          className="purchase-code"
+                          onClick={() => {
+                            navigator.clipboard.writeText(purchase.stockData.code);
+                            alert('Code copied to clipboard!');
+                          }}
+                          title="Click to copy"
+                        >
+                          {purchase.stockData.code}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="purchase-detail-row">
+                      <p>
+                        <strong>Data:</strong>
+                        <span className="purchase-data">{purchase.stockData.data}</span>
+                      </p>
+                    </div>
+                    <div className="purchase-detail-row purchase-price-row">
+                      <p>
+                        <strong>Price:</strong>
+                        <span style={{display: 'flex', alignItems: 'center', gap: '6px', marginLeft: '10px'}}>
+                          <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
+                          <span style={{fontSize: '1.1rem', fontWeight: '800'}}>{purchase.price}</span>
+                        </span>
+                      </p>
+                    </div>
+                    <div className="purchase-detail-row purchase-date-row">
+                      <p>
+                        <strong>Date:</strong>
+                        <span style={{color: '#A0A0A0', marginLeft: '10px', fontWeight: '500'}}>
+                          {new Date(purchase.purchaseDate).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <button 
+                  className="copy-code-btn"
+                  onClick={() => {
+                    navigator.clipboard.writeText(purchase.stockData.code);
+                    alert('Code copied to clipboard!');
+                  }}
+                >
+                  📋 Copy Code
+                </button>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
