@@ -502,7 +502,7 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                 </p>
                 <div className="product-details">
                   <div className="detail-item">
-                    <strong>Product Code:</strong>
+                    <strong>GrowID/Gmail:</strong>
                     <div className="code-display">{purchaseDetails.code}</div>
                     <button 
                       className="copy-btn"
@@ -515,7 +515,7 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                     </button>
                   </div>
                   <div className="detail-item">
-                    <strong>Product Data:</strong>
+                    <strong>Password:</strong>
                     <div className="data-display">{purchaseDetails.data}</div>
                   </div>
                 </div>
@@ -675,7 +675,7 @@ function PurchasesPage({ user }) {
 
                   <div className="purchase-details">
                     <div className="purchase-detail-row">
-                      <span className="purchase-detail-label">Product Code</span>
+                      <span className="purchase-detail-label">GrowID/Gmail</span>
                       <div 
                         className="purchase-code"
                         onClick={() => {
@@ -689,7 +689,7 @@ function PurchasesPage({ user }) {
                     </div>
                     
                     <div className="purchase-detail-row">
-                      <span className="purchase-detail-label">Product Data</span>
+                      <span className="purchase-detail-label">Password</span>
                       <div className="purchase-data">{purchase.stockData.data}</div>
                     </div>
                     
@@ -866,7 +866,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
             <div className="stock-input-group">
               <input
                 type="text"
-                placeholder="GrowID"
+                placeholder="GrowID/Gmail"
                 value={newStockItem.code}
                 onChange={(e) => setNewStockItem({...newStockItem, code: e.target.value})}
                 className="admin-input"
@@ -881,7 +881,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
             </div>
             <input
               type="text"
-              placeholder="Stock Data (e.g., Premium Edition Key)"
+              placeholder="Password"
               value={newStockItem.data}
               onChange={(e) => setNewStockItem({...newStockItem, data: e.target.value})}
               className="admin-input"
@@ -969,8 +969,8 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
                 <button 
                   className="admin-btn-secondary"
                   onClick={() => {
-                    const code = prompt("Enter product code:");
-                    const data = prompt("Enter stock data:");
+                    const code = prompt("Enter GrowID/Gmail:");
+                    const data = prompt("Enter Password:");
                     if (code && data) {
                       addStockToExistingProduct(product.id, { code, data });
                     }
