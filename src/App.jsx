@@ -183,20 +183,24 @@ export default function App() {
     });
 
     // Load all users for admin
-    if (isAdmin) {
-      const usersRef = ref(db, 'users');
-      onValue(usersRef, (snapshot) => {
-        if (snapshot.exists()) {
-          const usersData = snapshot.val();
-          const usersArray = Object.entries(usersData).map(([key, value]) => ({
-            id: key,
-            ...value
-          }));
-          setUsers(usersArray);
-        }
-      });
-    }
-  }, [isAdmin]);
+    const loadUsers = () => {
+      if (user && user.email === "admin@gamestore.com") {
+        const usersRef = ref(db, 'users');
+        onValue(usersRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const usersData = snapshot.val();
+            const usersArray = Object.entries(usersData).map(([key, value]) => ({
+              id: key,
+              ...value
+            }));
+            setUsers(usersArray);
+          }
+        });
+      }
+    };
+
+    loadUsers();
+  }, [user]);
 
   if (loading) {
     return (
