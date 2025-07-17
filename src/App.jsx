@@ -625,13 +625,7 @@ function PurchasesPage({ user }) {
     return product?.image || null;
   };
 
-  const totalSpent = purchases.reduce((sum, purchase) => sum + purchase.price, 0);
-  const thisMonth = new Date().getMonth();
-  const thisYear = new Date().getFullYear();
-  const thisMonthPurchases = purchases.filter(purchase => {
-    const purchaseDate = new Date(purchase.purchaseDate);
-    return purchaseDate.getMonth() === thisMonth && purchaseDate.getFullYear() === thisYear;
-  });
+  
 
   return (
     <div className="page-card">
@@ -651,20 +645,7 @@ function PurchasesPage({ user }) {
             </div>
           </div>
 
-          <div className="purchases-stats">
-            <div className="stat-card">
-              <h3>{purchases.length}</h3>
-              <p>Total Games</p>
-            </div>
-            <div className="stat-card">
-              <h3>${totalSpent.toFixed(2)}</h3>
-              <p>Total Spent</p>
-            </div>
-            <div className="stat-card">
-              <h3>{thisMonthPurchases.length}</h3>
-              <p>This Month</p>
-            </div>
-          </div>
+          
 
           <div className="purchases-list">
             {purchases.map((purchase) => {
