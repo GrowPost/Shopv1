@@ -281,7 +281,7 @@ export default function App() {
             className="profile-btn" 
             onClick={() => setShowProfileDropdown(!showProfileDropdown)}
           >
-            👤
+            <img src="/IMG_1872.png" alt="Profile" style={{width: '24px', height: '24px', borderRadius: '50%'}} />
           </button>
           {showProfileDropdown && (
             <div className="profile-dropdown">
