@@ -330,7 +330,7 @@ export default function App() {
               className={`nav-btn ${page === "admin" ? "active" : ""}`}
               onClick={() => setPage("admin")}
             >
-              👑
+              <img src="/IMG_1871.png" alt="Admin" style={{width: '24px', height: '24px'}} />
             </button>
           )}
         </div>

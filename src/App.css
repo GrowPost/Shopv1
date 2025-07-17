@@ -1126,9 +1126,11 @@ body {
   color: #E0E0E0;
   font-size: 0.85rem;
   word-break: break-all;
+  overflow-wrap: break-word;
   margin-left: 8px;
   flex: 1;
-  min-width: 200px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .purchase-data {
@@ -1140,9 +1142,11 @@ body {
   color: #E0E0E0;
   font-size: 0.85rem;
   word-break: break-all;
+  overflow-wrap: break-word;
   margin-left: 8px;
   flex: 1;
-  min-width: 200px;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .copy-code-btn {
@@ -1172,7 +1176,8 @@ body {
   border-radius: 16px;
   border: 1px solid #2A2F3E;
   max-width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
+  overflow-wrap: break-word;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
@@ -1336,6 +1341,8 @@ body {
   gap: 20px;
   flex-wrap: wrap;
   max-width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 
 .admin-product-info {
@@ -1380,8 +1387,10 @@ body {
   flex-direction: column;
   gap: 4px;
   flex: 1;
-  min-width: 200px;
+  min-width: 0;
   word-break: break-all;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .admin-product-actions {
@@ -1546,6 +1555,8 @@ body {
   font-size: 0.9rem;
   word-break: break-all;
   min-width: 0;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .user-details {
