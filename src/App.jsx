@@ -35,6 +35,7 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [users, setUsers] = useState([]);
+  const [errorDialog, setErrorDialog] = useState({ show: false, message: '' });
 
   // Database functions
   const createUserProfile = async (user) => {
@@ -221,29 +222,29 @@ export default function App() {
   if (!user) {
     const handleLogin = async () => {
       if (!email || !password) {
-        alert('Please enter both email and password');
+        setErrorDialog({ show: true, message: 'Please enter both email and password' });
         return;
       }
       try {
         await signInWithEmailAndPassword(auth, email, password);
       } catch (error) {
-        alert('Login failed: ' + error.message);
+        setErrorDialog({ show: true, message: 'Login failed: ' + error.message });
       }
     };
 
     const handleRegister = async () => {
       if (!email || !password) {
-        alert('Please enter both email and password');
+        setErrorDialog({ show: true, message: 'Please enter both email and password' });
         return;
       }
       if (password.length < 6) {
-        alert('Password must be at least 6 characters long');
+        setErrorDialog({ show: true, message: 'Password must be at least 6 characters long' });
         return;
       }
       try {
         await createUserWithEmailAndPassword(auth, email, password);
       } catch (error) {
-        alert('Registration failed: ' + error.message);
+        setErrorDialog({ show: true, message: 'Registration failed: ' + error.message });
       }
     };
 
@@ -315,13 +316,29 @@ export default function App() {
             </div>
           </div>
         </div>
+
+        <Dialog
+          isOpen={errorDialog.show}
+          onClose={() => setErrorDialog({ show: false, message: '' })}
+          title="Error"
+          className="error"
+        >
+          <p style={{ color: 'white', margin: '10px 0', textAlign: 'center' }}>{errorDialog.message}</p>
+          <button 
+            className="btn-primary"
+            onClick={() => setErrorDialog({ show: false, message: '' })}
+            style={{ width: '100%', marginTop: '15px' }}
+          >
+            OK
+          </button>
+        </Dialog>
       </div>
     );
   }
 
   return (
     <div className="main-container">
-      <header className="header">
+      <header className="header sticky-header">
         <div className="logo">
           <span className="logo-g">Grow4</span>
           <span className="logo-d">Bot</span>
