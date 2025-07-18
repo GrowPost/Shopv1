@@ -17,6 +17,7 @@ import {
   remove
 } from "firebase/database";
 import { firebaseConfig } from "./firebaseConfig";
+import Dialog from "./Dialog";
 import "./App.css";
 
 const app = initializeApp(firebaseConfig);
@@ -504,91 +505,87 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
         </div>
       )}
 
-      {selectedProduct && (
-        <div className="purchase-dialog-overlay" onClick={() => setSelectedProduct(null)}>
-          <div className="purchase-dialog" onClick={(e) => e.stopPropagation()}>
-            <div className="dialog-header">
-              <h3>{selectedProduct.name}</h3>
-              <button className="close-btn" onClick={() => setSelectedProduct(null)}>×</button>
+      <Dialog
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+        title={selectedProduct?.name || ''}
+        className="large"
+      >
+        {selectedProduct && (
+          <>
+            <div className="dialog-price">
+              <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
+              {selectedProduct.price}
             </div>
-            <div className="dialog-content">
-              <div className="dialog-price">
-                <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
-                {selectedProduct.price}
-              </div>
-              <p>Available Stock: {selectedProduct.stockData ? selectedProduct.stockData.length : 0} items</p>
-              <div className="purchase-info">
-                <p>You will receive a unique product code and data after purchase.</p>
-                <button 
-                  className={`buy-product-btn ${userBalance < selectedProduct.price ? 'disabled' : ''}`}
-                  onClick={() => {
-                    if (selectedProduct.stockData && selectedProduct.stockData.length > 0) {
-                      const stockItem = selectedProduct.stockData[0]; // Get first available stock
-                      handlePurchase(selectedProduct, stockItem, 0);
-                    }
-                  }}
-                  disabled={userBalance < selectedProduct.price || !selectedProduct.stockData || selectedProduct.stockData.length === 0}
-                >
-                  {userBalance >= selectedProduct.price ? (
-                    <span style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'}}>
-                      Buy for <img src="/IMG_1858.webp" alt="Balance" style={{width: '14px', height: '14px'}} /> {selectedProduct.price}
-                    </span>
-                  ) : 'Insufficient Funds'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showSuccessDialog && purchaseDetails && (
-        <div className="purchase-dialog-overlay" onClick={() => setShowSuccessDialog(false)}>
-          <div className="success-dialog" onClick={(e) => e.stopPropagation()}>
-            <div className="dialog-header">
-              <h3>🎉 Purchase Successful!</h3>
-              <button className="close-btn" onClick={() => setShowSuccessDialog(false)}>×</button>
-            </div>
-            <div className="dialog-content">
-              <div className="success-info">
-                <h4>{purchaseDetails.productName}</h4>
-                <p className="purchase-price">
-                  <span>Paid:</span>
-                  <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-                    <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
-                    {purchaseDetails.price}
+            <p>Available Stock: {selectedProduct.stockData ? selectedProduct.stockData.length : 0} items</p>
+            <div className="purchase-info">
+              <p>You will receive a unique product code and data after purchase.</p>
+              <button 
+                className={`buy-product-btn ${userBalance < selectedProduct.price ? 'disabled' : ''}`}
+                onClick={() => {
+                  if (selectedProduct.stockData && selectedProduct.stockData.length > 0) {
+                    const stockItem = selectedProduct.stockData[0]; // Get first available stock
+                    handlePurchase(selectedProduct, stockItem, 0);
+                  }
+                }}
+                disabled={userBalance < selectedProduct.price || !selectedProduct.stockData || selectedProduct.stockData.length === 0}
+              >
+                {userBalance >= selectedProduct.price ? (
+                  <span style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'}}>
+                    Buy for <img src="/IMG_1858.webp" alt="Balance" style={{width: '14px', height: '14px'}} /> {selectedProduct.price}
                   </span>
-                </p>
-                <div className="product-details">
-                  <div className="detail-item">
-                    <strong>GrowID/Gmail:</strong>
-                    <div className="code-display">{purchaseDetails.code}</div>
-                    <button 
-                      className="copy-btn"
-                      onClick={() => {
-                        navigator.clipboard.writeText(purchaseDetails.code);
-                        alert('Code copied to clipboard!');
-                      }}
-                    >
-                      Copy Code
-                    </button>
-                  </div>
-                  <div className="detail-item">
-                    <strong>Password:</strong>
-                    <div className="data-display">{purchaseDetails.data}</div>
-                  </div>
-                </div>
-                <p className="success-note">Your purchase has been saved to your purchase history.</p>
+                ) : 'Insufficient Funds'}
+              </button>
+            </div>
+          </>
+        )}
+      </Dialog>
+
+      <Dialog
+        isOpen={showSuccessDialog && !!purchaseDetails}
+        onClose={() => setShowSuccessDialog(false)}
+        title="🎉 Purchase Successful!"
+        className="success large"
+      >
+        {purchaseDetails && (
+          <div className="success-info">
+            <h4>{purchaseDetails.productName}</h4>
+            <p className="purchase-price">
+              <span>Paid:</span>
+              <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+                <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
+                {purchaseDetails.price}
+              </span>
+            </p>
+            <div className="product-details">
+              <div className="detail-item">
+                <strong>GrowID/Gmail:</strong>
+                <div className="code-display">{purchaseDetails.code}</div>
                 <button 
-                  className="success-btn"
-                  onClick={() => setShowSuccessDialog(false)}
+                  className="copy-btn"
+                  onClick={() => {
+                    navigator.clipboard.writeText(purchaseDetails.code);
+                    alert('Code copied to clipboard!');
+                  }}
                 >
-                  Continue Shopping
+                  Copy Code
                 </button>
               </div>
+              <div className="detail-item">
+                <strong>Password:</strong>
+                <div className="data-display">{purchaseDetails.data}</div>
+              </div>
             </div>
+            <p className="success-note">Your purchase has been saved to your purchase history.</p>
+            <button 
+              className="success-btn"
+              onClick={() => setShowSuccessDialog(false)}
+            >
+              Continue Shopping
+            </button>
           </div>
-        </div>
-      )}
+        )}
+      </Dialog>
     </div>
   );
 }
