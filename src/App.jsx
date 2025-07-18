@@ -218,41 +218,101 @@ export default function App() {
   }
 
   if (!user) {
+    const handleLogin = async () => {
+      if (!email || !password) {
+        alert('Please enter both email and password');
+        return;
+      }
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        alert('Login failed: ' + error.message);
+      }
+    };
+
+    const handleRegister = async () => {
+      if (!email || !password) {
+        alert('Please enter both email and password');
+        return;
+      }
+      if (password.length < 6) {
+        alert('Password must be at least 6 characters long');
+        return;
+      }
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        alert('Registration failed: ' + error.message);
+      }
+    };
+
+    const handleKeyPress = (e) => {
+      if (e.key === 'Enter') {
+        handleLogin();
+      }
+    };
+
     return (
       <div className="auth-container">
         <div className="auth-card">
-          <h2 className="auth-title">Grow4Bot</h2>
-          <input
-            className="auth-input"
-            placeholder="Email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            className="auth-input"
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <div className="auth-buttons">
-            <button
-              className="btn-secondary"
-              onClick={() => createUserWithEmailAndPassword(auth, email, password)}
-            >
-              Register
-            </button>
-            <button
-              className="btn-primary"
-              onClick={() => signInWithEmailAndPassword(auth, email, password)}
-            >
-              Login
-            </button>
+          <div className="auth-header">
+            <div className="auth-logo">
+              <span className="logo-g">Grow4</span>
+              <span className="logo-d">Bot</span>
+            </div>
+            <h2 className="auth-subtitle">Welcome Back</h2>
+            <p className="auth-description">Sign in to your account to continue</p>
           </div>
-          <p style={{marginTop: '20px', color: '#A0A0A0', fontSize: '14px'}}>
-            Admin login: admin@gamestore.com / password: admin123
-          </p>
+          
+          <div className="auth-form">
+            <div className="input-group">
+              <input
+                className="auth-input"
+                placeholder="Email address"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyPress={handleKeyPress}
+              />
+              <span className="input-icon">📧</span>
+            </div>
+            
+            <div className="input-group">
+              <input
+                className="auth-input"
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyPress={handleKeyPress}
+              />
+              <span className="input-icon">🔒</span>
+            </div>
+            
+            <div className="auth-buttons">
+              <button
+                className="btn-primary"
+                onClick={handleLogin}
+                disabled={!email || !password}
+              >
+                Sign In
+              </button>
+              <button
+                className="btn-secondary"
+                onClick={handleRegister}
+                disabled={!email || !password}
+              >
+                Create Account
+              </button>
+            </div>
+          </div>
+          
+          <div className="auth-footer">
+            <div className="demo-info">
+              <p className="demo-label">Demo Account</p>
+              <p className="demo-credentials">admin@gamestore.com / admin123</p>
+            </div>
+          </div>
         </div>
       </div>
     );

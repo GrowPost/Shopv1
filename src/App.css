@@ -291,6 +291,7 @@ body {
   max-width: 100vw;
   overflow-x: hidden;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 /* Navigation */
@@ -1814,7 +1815,7 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 18px;
   }
-  
+
   .page-card {
     margin: 15px;
     padding: 25px;
@@ -2008,8 +2009,7 @@ body {
   }
 
   .admin-btn, .admin-btn-secondary {
-    max-width: unset;
-  }
+    max-width: unset;  }
 
   .code-stock-item {
     flex-direction: column;
@@ -2051,61 +2051,61 @@ body {
   .header {
     padding: 10px 12px;
   }
-  
+
   .logo {
     font-size: 1.4rem;
   }
-  
+
   .nav-bar {
     padding: 18px 15px;
   }
-  
+
   .nav-buttons {
     gap: 40px;
     max-width: 250px;
   }
-  
+
   .nav-btn {
     width: 48px;
     height: 48px;
     padding: 12px;
   }
-  
+
   .nav-btn img {
     width: 22px !important;
     height: 22px !important;
   }
-  
+
   .content {
     padding-bottom: 110px;
   }
-  
+
   .page-card {
     margin: 8px;
     padding: 16px;
   }
-  
+
   .page-title {
     font-size: 1.8rem;
     margin-bottom: 25px;
   }
-  
+
   .products-grid {
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  
+
   .product-card {
     height: 280px;
     padding: 14px;
   }
-  
+
   .balance-display-header {
     font-size: 12px;
     padding: 6px 10px;
     height: 32px;
   }
-  
+
   .wallet-btn {
     height: 32px;
     min-width: 32px;
