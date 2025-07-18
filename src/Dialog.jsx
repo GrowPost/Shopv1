@@ -9,7 +9,8 @@ export default function Dialog({
   children, 
   className = '',
   showCloseButton = true,
-  closeOnOverlayClick = true 
+  closeOnOverlayClick = true,
+  size = 'medium' // small, medium, large
 }) {
   if (!isOpen) return null;
 
@@ -39,15 +40,17 @@ export default function Dialog({
 
   return (
     <div className="dialog-overlay" onClick={handleOverlayClick}>
-      <div className={`dialog-container ${className}`} onClick={(e) => e.stopPropagation()}>
-        <div className="dialog-header">
-          <h3 className="dialog-title">{title}</h3>
-          {showCloseButton && (
-            <button className="dialog-close-btn" onClick={onClose}>
-              ×
-            </button>
-          )}
-        </div>
+      <div className={`dialog-container ${size} ${className}`} onClick={(e) => e.stopPropagation()}>
+        {(title || showCloseButton) && (
+          <div className="dialog-header">
+            {title && <h3 className="dialog-title">{title}</h3>}
+            {showCloseButton && (
+              <button className="dialog-close-btn" onClick={onClose}>
+                ×
+              </button>
+            )}
+          </div>
+        )}
         <div className="dialog-content">
           {children}
         </div>

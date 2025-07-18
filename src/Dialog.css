@@ -27,8 +27,6 @@
   background: linear-gradient(145deg, #1E2233, #252A3F);
   border: 1px solid #3B7AFD;
   border-radius: 16px;
-  max-width: 500px;
-  width: 90%;
   max-height: 80vh;
   overflow-y: auto;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
@@ -45,6 +43,22 @@
     opacity: 1;
     transform: scale(1) translateY(0);
   }
+}
+
+/* Size variants */
+.dialog-container.small {
+  max-width: 350px;
+  width: 90%;
+}
+
+.dialog-container.medium {
+  max-width: 500px;
+  width: 90%;
+}
+
+.dialog-container.large {
+  max-width: 700px;
+  width: 95%;
 }
 
 .dialog-header {
@@ -122,12 +136,133 @@
   text-shadow: 0 2px 8px rgba(255, 107, 107, 0.3);
 }
 
-.dialog-container.large {
-  max-width: 700px;
+/* Dialog content styles */
+.dialog-price {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #3B7AFD;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
 
-.dialog-container.small {
-  max-width: 350px;
+.purchase-info {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.purchase-info p {
+  color: #A0A0A0;
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.buy-product-btn {
+  background: #1F5CEB;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.buy-product-btn:hover:not(.disabled) {
+  background: #3B7AFD;
+  transform: translateY(-2px);
+}
+
+.buy-product-btn.disabled {
+  background: #4A4A4A;
+  cursor: not-allowed;
+}
+
+/* Success dialog specific styles */
+.success-info {
+  text-align: center;
+}
+
+.success-info h4 {
+  color: #4CAF50;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.purchase-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 15px 0;
+  padding: 10px;
+  background: rgba(59, 122, 253, 0.1);
+  border-radius: 8px;
+}
+
+.product-details {
+  margin: 20px 0;
+  text-align: left;
+}
+
+.detail-item {
+  margin-bottom: 15px;
+}
+
+.detail-item strong {
+  display: block;
+  color: #3B7AFD;
+  margin-bottom: 5px;
+}
+
+.code-display, .data-display {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 6px;
+  font-family: monospace;
+  margin: 5px 0;
+  word-break: break-all;
+}
+
+.copy-btn {
+  background: #3B7AFD;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+.copy-btn:hover {
+  background: #5A8FFF;
+}
+
+.success-note {
+  color: #A0A0A0;
+  font-style: italic;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.success-btn {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.success-btn:hover {
+  background: #45a049;
 }
 
 /* Responsive design */
@@ -136,6 +271,10 @@
     width: 95%;
     max-height: 85vh;
     margin: 10px;
+  }
+
+  .dialog-container.large {
+    width: 98%;
   }
 
   .dialog-header {

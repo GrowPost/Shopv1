@@ -36,6 +36,8 @@ export default function App() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [users, setUsers] = useState([]);
   const [errorDialog, setErrorDialog] = useState({ show: false, message: '' });
+  const [confirmDialog, setConfirmDialog] = useState({ show: false, message: '', onConfirm: null });
+  const [infoDialog, setInfoDialog] = useState({ show: false, title: '', message: '' });
 
   // Database functions
   const createUserProfile = async (user) => {
@@ -322,11 +324,57 @@ export default function App() {
           onClose={() => setErrorDialog({ show: false, message: '' })}
           title="Error"
           className="error"
+          size="small"
         >
           <p style={{ color: 'white', margin: '10px 0', textAlign: 'center' }}>{errorDialog.message}</p>
           <button 
             className="btn-primary"
             onClick={() => setErrorDialog({ show: false, message: '' })}
+            style={{ width: '100%', marginTop: '15px' }}
+          >
+            OK
+          </button>
+        </Dialog>
+
+        <Dialog
+          isOpen={confirmDialog.show}
+          onClose={() => setConfirmDialog({ show: false, message: '', onConfirm: null })}
+          title="Confirm Action"
+          className="warning"
+          size="small"
+        >
+          <p style={{ color: 'white', margin: '10px 0', textAlign: 'center' }}>{confirmDialog.message}</p>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+            <button 
+              className="btn-secondary"
+              onClick={() => setConfirmDialog({ show: false, message: '', onConfirm: null })}
+              style={{ flex: 1 }}
+            >
+              Cancel
+            </button>
+            <button 
+              className="btn-primary"
+              onClick={() => {
+                if (confirmDialog.onConfirm) confirmDialog.onConfirm();
+                setConfirmDialog({ show: false, message: '', onConfirm: null });
+              }}
+              style={{ flex: 1 }}
+            >
+              Confirm
+            </button>
+          </div>
+        </Dialog>
+
+        <Dialog
+          isOpen={infoDialog.show}
+          onClose={() => setInfoDialog({ show: false, title: '', message: '' })}
+          title={infoDialog.title}
+          size="medium"
+        >
+          <p style={{ color: 'white', margin: '10px 0', textAlign: 'center' }}>{infoDialog.message}</p>
+          <button 
+            className="btn-primary"
+            onClick={() => setInfoDialog({ show: false, title: '', message: '' })}
             style={{ width: '100%', marginTop: '15px' }}
           >
             OK
@@ -375,10 +423,33 @@ export default function App() {
       </header>
 
       <div className="content">
-        {page === "home" && <HomePage products={products} userBalance={userBalance} updateUserBalance={updateUserBalance} user={user} addPurchase={addPurchase} updateProductStock={updateProductStock} />}
+        {page === "home" && <HomePage 
+          products={products} 
+          userBalance={userBalance} 
+          updateUserBalance={updateUserBalance} 
+          user={user} 
+          addPurchase={addPurchase} 
+          updateProductStock={updateProductStock}
+          showErrorDialog={(message) => setErrorDialog({ show: true, message })}
+          showInfoDialog={(title, message) => setInfoDialog({ show: true, title, message })}
+        />}
         {page === "wallet" && <WalletPage balance={userBalance} user={user} />}
-        {page === "purchases" && <PurchasesPage user={user} />}
-        {page === "admin" && isAdmin && <AdminPage products={products} addProduct={addProduct} deleteProduct={deleteProduct} updateProductStock={updateProductStock} users={users} banUser={banUser} addBalanceToUser={addBalanceToUser} />}
+        {page === "purchases" && <PurchasesPage 
+          user={user}
+          showInfoDialog={(title, message) => setInfoDialog({ show: true, title, message })}
+        />}
+        {page === "admin" && isAdmin && <AdminPage 
+          products={products} 
+          addProduct={addProduct} 
+          deleteProduct={deleteProduct} 
+          updateProductStock={updateProductStock} 
+          users={users} 
+          banUser={banUser} 
+          addBalanceToUser={addBalanceToUser}
+          showErrorDialog={(message) => setErrorDialog({ show: true, message })}
+          showConfirmDialog={(message, onConfirm) => setConfirmDialog({ show: true, message, onConfirm })}
+          showInfoDialog={(title, message) => setInfoDialog({ show: true, title, message })}
+        />}
       </div>
 
       <nav className="nav-bar">
@@ -415,7 +486,7 @@ export default function App() {
   );
 }
 
-function HomePage({ products, userBalance, updateUserBalance, user, addPurchase, updateProductStock }) {
+function HomePage({ products, userBalance, updateUserBalance, user, addPurchase, updateProductStock, showErrorDialog, showInfoDialog }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [purchaseDetails, setPurchaseDetails] = useState(null);
@@ -424,19 +495,19 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
     if (product.stockData && product.stockData.length > 0) {
       setSelectedProduct(product);
     } else {
-      alert("This product is out of stock!");
+      showErrorDialog("This product is out of stock!");
     }
   };
 
   const handlePurchase = async (product, stockItem, stockIndex) => {
     try {
       if (!user) {
-        alert("Please log in to make a purchase.");
+        showErrorDialog("Please log in to make a purchase.");
         return;
       }
 
       if (!product.stockData || product.stockData.length === 0) {
-        alert("This product is out of stock!");
+        showErrorDialog("This product is out of stock!");
         return;
       }
 
@@ -463,11 +534,11 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
         setShowSuccessDialog(true);
         setSelectedProduct(null);
       } else {
-        alert("Insufficient balance! Please add funds to your wallet.");
+        showErrorDialog("Insufficient balance! Please add funds to your wallet.");
       }
     } catch (error) {
       console.error("Purchase error:", error);
-      alert("Purchase failed. Please try again.");
+      showErrorDialog("Purchase failed. Please try again.");
     }
   };
 
@@ -526,7 +597,7 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
         isOpen={!!selectedProduct}
         onClose={() => setSelectedProduct(null)}
         title={selectedProduct?.name || ''}
-        className="large"
+        size="medium"
       >
         {selectedProduct && (
           <>
@@ -562,7 +633,8 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
         isOpen={showSuccessDialog && !!purchaseDetails}
         onClose={() => setShowSuccessDialog(false)}
         title="🎉 Purchase Successful!"
-        className="success large"
+        className="success"
+        size="large"
       >
         {purchaseDetails && (
           <div className="success-info">
@@ -582,7 +654,7 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                   className="copy-btn"
                   onClick={() => {
                     navigator.clipboard.writeText(purchaseDetails.code);
-                    alert('Code copied to clipboard!');
+                    showInfoDialog('Copied!', 'Code copied to clipboard!');
                   }}
                 >
                   Copy Code
@@ -798,7 +870,7 @@ function PurchasesPage({ user }) {
   );
 }
 
-function AdminPage({ products, addProduct, deleteProduct, updateProductStock, users, banUser, addBalanceToUser }) {
+function AdminPage({ products, addProduct, deleteProduct, updateProductStock, users, banUser, addBalanceToUser, showErrorDialog, showConfirmDialog, showInfoDialog }) {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
@@ -828,7 +900,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
       });
       setNewStockItem({ code: '', data: '' });
     } else {
-      alert('Please fill in both code and data for the stock item');
+      showErrorDialog('Please fill in both code and data for the stock item');
     }
   };
 
@@ -849,17 +921,17 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
       };
       await addProduct(product);
       setNewProduct({ name: '', price: '', image: '', category: '', stockData: [] });
-      alert('Product added successfully!');
+      showInfoDialog('Success', 'Product added successfully!');
     } else {
-      alert('Please fill in all fields and add at least one stock item');
+      showErrorDialog('Please fill in all fields and add at least one stock item');
     }
   };
 
   const handleDeleteProduct = async (id) => {
-    if (confirm('Are you sure you want to delete this product?')) {
+    showConfirmDialog('Are you sure you want to delete this product?', async () => {
       await deleteProduct(id);
-      alert('Product deleted successfully!');
-    }
+      showInfoDialog('Success', 'Product deleted successfully!');
+    });
   };
 
   const addStockToExistingProduct = async (productId, stockItem) => {
@@ -867,7 +939,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
     if (product) {
       const newStockData = [...(product.stockData || []), stockItem];
       await updateProductStock(productId, newStockData);
-      alert('Stock added successfully!');
+      showInfoDialog('Success', 'Stock added successfully!');
     }
   };
 
@@ -876,13 +948,13 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
     if (product && product.stockData) {
       const newStockData = product.stockData.filter((_, index) => index !== stockIndex);
       await updateProductStock(productId, newStockData);
-      alert('Stock removed successfully!');
+      showInfoDialog('Success', 'Stock removed successfully!');
     }
   };
 
   const handleBanUser = async (userId, currentBanStatus) => {
     await banUser(userId, !currentBanStatus);
-    alert(`User ${!currentBanStatus ? 'banned' : 'unbanned'} successfully!`);
+    showInfoDialog('Success', `User ${!currentBanStatus ? 'banned' : 'unbanned'} successfully!`);
   };
 
   const handleAddBalanceToUser = async () => {
@@ -891,9 +963,9 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
       await addBalanceToUser(selectedUserId, amount);
       setBalanceAmount('');
       setSelectedUserId('');
-      alert(`Successfully added $${amount} to user's wallet!`);
+      showInfoDialog('Success', `Successfully added $${amount} to user's wallet!`);
     } else {
-      alert('Please select a user and enter a valid amount');
+      showErrorDialog('Please select a user and enter a valid amount');
     }
   };
 
@@ -1045,6 +1117,8 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
                     const data = prompt("Enter Password:");
                     if (code && data) {
                       addStockToExistingProduct(product.id, { code, data });
+                    } else {
+                      showErrorDialog('Please enter both code and data');
                     }
                   }}
                 >
