@@ -1,4 +1,3 @@
-
 import React from 'react';
 import './Dialog.css';
 
@@ -39,7 +38,7 @@ export default function Dialog({
   }, [isOpen, onClose]);
 
   return (
-    <div className="dialog-overlay" onClick={handleOverlayClick}>
+    <div key="dialog-overlay" className="dialog-overlay" onClick={handleOverlayClick}>
       <div className={`dialog-container ${size} ${className}`} onClick={(e) => e.stopPropagation()}>
         {(title || showCloseButton) && (
           <div className="dialog-header">

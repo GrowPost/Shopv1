@@ -267,7 +267,7 @@ export default function App() {
             <h2 className="auth-subtitle">Welcome Back</h2>
             <p className="auth-description">Sign in to your account to continue</p>
           </div>
-          
+
           <div className="auth-form">
             <div className="input-group">
               <input
@@ -280,7 +280,7 @@ export default function App() {
               />
               <span className="input-icon">📧</span>
             </div>
-            
+
             <div className="input-group">
               <input
                 className="auth-input"
@@ -292,7 +292,7 @@ export default function App() {
               />
               <span className="input-icon">🔒</span>
             </div>
-            
+
             <div className="auth-buttons">
               <button
                 className="btn-primary"
@@ -310,7 +310,7 @@ export default function App() {
               </button>
             </div>
           </div>
-          
+
           <div className="auth-footer">
             <div className="demo-info">
               <p className="demo-label">Demo Account</p>
@@ -831,7 +831,7 @@ function PurchasesPage({ user }) {
     return product?.image || null;
   };
 
-  
+
 
   return (
     <div className="page-card">
@@ -851,12 +851,12 @@ function PurchasesPage({ user }) {
             </div>
           </div>
 
-          
+
 
           <div className="purchases-list">
             {purchases.map((purchase) => {
               const productImage = getProductImage(purchase.productId, purchase.productName);
-              
+
               return (
                 <div key={purchase.id} className="purchase-item">
                   <div className="purchase-header-section">
@@ -885,7 +885,8 @@ function PurchasesPage({ user }) {
                       <div 
                         className="purchase-code"
                         onClick={() => {
-                          navigator.clipboard.writeText(purchase.stockData.code);
+                          navigator.clipboard.writeText(purchase```text
+.stockData.code);
                           alert('Code copied to clipboard!');
                         }}
                         title="Click to copy"
@@ -893,12 +894,12 @@ function PurchasesPage({ user }) {
                         {purchase.stockData.code}
                       </div>
                     </div>
-                    
+
                     <div className="purchase-detail-row">
                       <span className="purchase-detail-label">Password</span>
                       <div className="purchase-data">{purchase.stockData.data}</div>
                     </div>
-                    
+
                     <div className="purchase-detail-row">
                       <span className="purchase-detail-label">Purchase Date</span>
                       <div className="purchase-date-info">
@@ -1205,7 +1206,7 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
 
       <div className="admin-section">
         <h2>User Management</h2>
-        
+
         <div className="user-balance-section">
           <h3>Add Balance to User</h3>
           <div className="user-balance-form">
