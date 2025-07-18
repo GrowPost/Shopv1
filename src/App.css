@@ -714,6 +714,40 @@ body {
   cursor: not-allowed;
 }
 
+/* Dialog Button Styles */
+.btn-primary {
+  background: #3B7AFD;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.btn-primary:hover {
+  background: #5A8FFF;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #4A4A4A;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+  background: #5A5A5A;
+}
+
 /* Wallet Page */
 .wallet-balance-container {
   margin-bottom: 40px;

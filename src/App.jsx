@@ -482,6 +482,68 @@ export default function App() {
           )}
         </div>
       </nav>
+
+      <Dialog
+        isOpen={errorDialog.show}
+        onClose={() => setErrorDialog({ show: false, message: '' })}
+        title="Error"
+        className="error"
+        size="small"
+      >
+        <p style={{ color: 'white', margin: '10px 0', textAlign: 'center' }}>{errorDialog.message}</p>
+        <button 
+          className="btn-primary"
+          onClick={() => setErrorDialog({ show: false, message: '' })}
+          style={{ width: '100%', marginTop: '15px' }}
+        >
+          OK
+        </button>
+      </Dialog>
+
+      <Dialog
+        isOpen={confirmDialog.show}
+        onClose={() => setConfirmDialog({ show: false, message: '', onConfirm: null })}
+        title="Confirm Action"
+        className="warning"
+        size="small"
+      >
+        <p style={{ color: 'white', margin: '10px 0', textAlign: 'center' }}>{confirmDialog.message}</p>
+        <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+          <button 
+            className="btn-secondary"
+            onClick={() => setConfirmDialog({ show: false, message: '', onConfirm: null })}
+            style={{ flex: 1 }}
+          >
+            Cancel
+          </button>
+          <button 
+            className="btn-primary"
+            onClick={() => {
+              if (confirmDialog.onConfirm) confirmDialog.onConfirm();
+              setConfirmDialog({ show: false, message: '', onConfirm: null });
+            }}
+            style={{ flex: 1 }}
+          >
+            Confirm
+          </button>
+        </div>
+      </Dialog>
+
+      <Dialog
+        isOpen={infoDialog.show}
+        onClose={() => setInfoDialog({ show: false, title: '', message: '' })}
+        title={infoDialog.title}
+        size="small"
+      >
+        <p style={{ color: 'white', margin: '10px 0', textAlign: 'center' }}>{infoDialog.message}</p>
+        <button 
+          className="btn-primary"
+          onClick={() => setInfoDialog({ show: false, title: '', message: '' })}
+          style={{ width: '100%', marginTop: '15px' }}
+        >
+          OK
+        </button>
+      </Dialog>
     </div>
   );
 }
@@ -929,8 +991,13 @@ function AdminPage({ products, addProduct, deleteProduct, updateProductStock, us
 
   const handleDeleteProduct = async (id) => {
     showConfirmDialog('Are you sure you want to delete this product?', async () => {
-      await deleteProduct(id);
-      showInfoDialog('Success', 'Product deleted successfully!');
+      try {
+        await deleteProduct(id);
+        showInfoDialog('Success', 'Product deleted successfully!');
+      } catch (error) {
+        console.error('Delete error:', error);
+        showErrorDialog('Failed to delete product. Please try again.');
+      }
     });
   };
 
