@@ -885,8 +885,7 @@ function PurchasesPage({ user }) {
                       <div 
                         className="purchase-code"
                         onClick={() => {
-                          navigator.clipboard.writeText(purchase```text
-.stockData.code);
+                          navigator.clipboard.writeText(purchase.stockData.code);
                           alert('Code copied to clipboard!');
                         }}
                         title="Click to copy"
