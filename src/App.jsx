@@ -569,42 +569,58 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
         </div>
       ) : (
         <div className="products-grid">
-          {products.map(product => (
-            <div key={product.id} className="product-card" onClick={() => handleProductClick(product)}>
-              <img 
-                src={product.image} 
-                alt={product.name}
-                className="product-image"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.nextSibling.style.display = 'block';
-                }}
-              />
-              <div style={{ display: 'none', fontSize: '4rem', marginBottom: '15px' }}>🎮</div>
-              <h3 className="product-name">{product.name}</h3>
-              <p className="product-category">{product.category}</p>
-              <div className="product-price">
-                <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
-                {product.price}
+          {products.map(product => {
+            const stockCount = product.stockData ? product.stockData.length : 0;
+            const stockStatus = stockCount === 0 ? 'out-of-stock' : stockCount <= 2 ? 'low-stock' : '';
+            
+            return (
+              <div key={product.id} className="product-card">
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="product-image"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'block';
+                  }}
+                />
+                <div style={{ display: 'none', fontSize: '3rem' }}>🎮</div>
+                
+                <div className="product-info">
+                  <div className="product-header">
+                    <div className="product-title-section">
+                      <div className={`product-stock-badge ${stockStatus}`}>
+                        ● STOCK: {stockCount}
+                      </div>
+                      <span className="product-category">Medium Profit</span>
+                    </div>
+                  </div>
+                  
+                  <h3 className="product-name">{product.name}</h3>
+                  
+                  <div className="product-price">
+                    <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
+                    {product.price}
+                  </div>
+                </div>
+                
+                <div className="product-actions">
+                  <button className="info-btn">Info</button>
+                  <button 
+                    className={`buy-btn ${userBalance < product.price || !product.stockData || product.stockData.length === 0 ? 'disabled' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleProductClick(product);
+                    }}
+                    disabled={userBalance < product.price || !product.stockData || product.stockData.length === 0}
+                  >
+                    {!product.stockData || product.stockData.length === 0 ? 'Out of Stock' : 
+                     userBalance >= product.price ? 'Buy' : 'Insufficient'}
+                  </button>
+                </div>
               </div>
-              <div className="product-stock">
-                Stock: <span className={`stock-count ${(!product.stockData || product.stockData.length <= 2) ? 'low-stock' : ''}`}>
-                  {product.stockData ? product.stockData.length : 0}
-                </span>
-              </div>
-              <button 
-                className={`buy-btn ${userBalance < product.price || !product.stockData || product.stockData.length === 0 ? 'disabled' : ''}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleProductClick(product);
-                }}
-                disabled={userBalance < product.price || !product.stockData || product.stockData.length === 0}
-              >
-                {!product.stockData || product.stockData.length === 0 ? 'Out of Stock' : 
-                 userBalance >= product.price ? 'Buy' : 'Insufficient Funds'}
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
