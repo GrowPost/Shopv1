@@ -33,7 +33,7 @@ export default function App() {
   const [userBalance, setUserBalance] = useState(125.50);
   const [products, setProducts] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  
   const [users, setUsers] = useState([]);
   const [errorDialog, setErrorDialog] = useState({ show: false, message: '' });
   const [confirmDialog, setConfirmDialog] = useState({ show: false, message: '', onConfirm: null });
@@ -356,22 +356,11 @@ export default function App() {
         <div className="profile-section">
           <button 
             className="profile-btn" 
-            onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+            onClick={() => signOut(auth)}
+            title="Logout"
           >
             <img src="/IMG_1872.png" alt="Profile" style={{width: '24px', height: '24px', borderRadius: '50%'}} />
           </button>
-          {showProfileDropdown && (
-            <div className="profile-dropdown">
-              <div className="profile-dropdown-item" onClick={() => { setPage("purchases"); setShowProfileDropdown(false); }}>
-                <span>🛍️</span>
-                <span>My Purchases</span>
-              </div>
-              <div className="profile-dropdown-item" onClick={() => { signOut(auth); setShowProfileDropdown(false); }}>
-                <span>🚪</span>
-                <span>Logout</span>
-              </div>
-            </div>
-          )}
         </div>
       </header>
 
