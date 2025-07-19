@@ -620,10 +620,12 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
               <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
               {selectedProduct.price}
             </div>
-            <p>Available Stock: {selectedProduct.stockData ? selectedProduct.stockData.length : 0} items</p>
-            <p style={{color: '#A0A0A0', marginBottom: '20px', fontStyle: 'italic', textAlign: 'center'}}>
+            <div className="stock-info">
+              Available Stock: {selectedProduct.stockData ? selectedProduct.stockData.length : 0} items
+            </div>
+            <div className="purchase-preview">
               You will receive a unique product code and data after purchase.
-            </p>
+            </div>
             <div className="purchase-info">
               <button 
                 className={`buy-product-btn ${userBalance < selectedProduct.price ? 'disabled' : ''}`}

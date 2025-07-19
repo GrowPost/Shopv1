@@ -7,6 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  align-content: center;
   z-index: 99999;
   padding: 20px;
   box-sizing: border-box;
@@ -43,6 +44,8 @@
   z-index: 100000;
   transform: translateZ(0);
   min-width: 320px;
+  align-self: center;
+  justify-self: center;
 }
 
 @keyframes dialogIn {
@@ -120,6 +123,7 @@
   overflow-x: hidden;
   word-wrap: break-word;
   box-sizing: border-box;
+  text-align: center;
 }
 
 .dialog-content.simple-content {
@@ -230,6 +234,28 @@
 .purchase-info {
   text-align: center;
   margin-top: 20px;
+}
+
+.stock-info {
+  color: #A0A0A0;
+  margin: 15px 0;
+  font-size: 0.95rem;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.purchase-preview {
+  color: #A0A0A0;
+  font-style: italic;
+  margin: 15px 0 20px 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  background: linear-gradient(135deg, rgba(59, 122, 253, 0.08), rgba(76, 175, 80, 0.04));
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid rgba(59, 122, 253, 0.2);
 }
 
 .purchase-info p {
