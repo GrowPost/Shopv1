@@ -1,7 +1,3 @@
-The dialog overlay padding is updated for better mobile spacing.
-```
-
-```replit_final_file>
 .dialog-overlay {
     position: fixed;
     top: 0;
