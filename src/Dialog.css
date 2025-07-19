@@ -311,8 +311,9 @@
 
 .purchase-price {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 8px;
   margin: 10px 0;
   padding: 10px 14px;
   background: linear-gradient(135deg, rgba(59, 122, 253, 0.08), rgba(76, 175, 80, 0.06));
@@ -321,6 +322,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   box-shadow: 0 2px 10px rgba(76, 175, 80, 0.12);
+  text-align: center;
 }
 
 .purchase-price span:first-child {
