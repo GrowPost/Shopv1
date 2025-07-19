@@ -1,20 +1,24 @@
+The dialog overlay padding is updated for better mobile spacing.
+```
 
+```replit_final_file>
 .dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(4px);
-  animation: dialogOverlayIn 0.2s ease-out;
-  padding: 20px;
-  box-sizing: border-box;
-}
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: dialogOverlayIn 0.2s ease-out;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+  }
 
 @keyframes dialogOverlayIn {
   from {
@@ -449,6 +453,9 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+  .dialog-overlay {
+    padding: 10px;
+  }
   .dialog-container {
     width: 94%;
     max-height: 95vh;
