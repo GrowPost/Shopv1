@@ -282,26 +282,8 @@ body {
 
 .product-actions {
   display: flex;
-  gap: 12px;
   align-items: center;
   flex-shrink: 0;
-}
-
-.info-btn {
-  background: rgba(59, 122, 253, 0.2);
-  border: 1px solid rgba(59, 122, 253, 0.5);
-  color: #3B7AFD;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.info-btn:hover {
-  background: rgba(59, 122, 253, 0.3);
-  transform: translateY(-1px);
 }
 
 .buy-btn {

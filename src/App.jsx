@@ -605,7 +605,6 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                 </div>
                 
                 <div className="product-actions">
-                  <button className="info-btn">Info</button>
                   <button 
                     className={`buy-btn ${userBalance < product.price || !product.stockData || product.stockData.length === 0 ? 'disabled' : ''}`}
                     onClick={(e) => {
