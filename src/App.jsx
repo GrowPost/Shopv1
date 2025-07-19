@@ -651,19 +651,27 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
       <Dialog
         isOpen={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
-        className="success"
-        variant="simple"
+        title="Purchase Successful"
+        size="medium"
       >
-        <div className="simple-success-message">
-          <span className="simple-success-icon">✅</span>
+        <div className="dialog-price">
+          <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
+          {purchaseDetails?.price}
+        </div>
+        <div className="stock-info">
+          Available Stock: 1 items
+        </div>
+        <div className="purchase-preview">
           Your purchase has been saved to your purchase history.
         </div>
-        <button 
-          className="success-btn"
-          onClick={() => setShowSuccessDialog(false)}
-        >
-          Continue Shopping
-        </button>
+        <div className="purchase-info">
+          <button 
+            className="buy-product-btn"
+            onClick={() => setShowSuccessDialog(false)}
+          >
+            Continue Shopping
+          </button>
+        </div>
       </Dialog>
     </div>
   );
