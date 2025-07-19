@@ -114,22 +114,60 @@
 }
 
 .dialog-container.simple {
-  max-width: 400px;
+  max-width: 450px;
   width: 90%;
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  box-shadow: 0 15px 35px rgba(76, 175, 80, 0.2);
+  background: rgba(20, 20, 20, 0.95);
+}
+
+.dialog-container.simple::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #4CAF50, #3B7AFD);
 }
 
 .simple-success-message {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   color: #4CAF50;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.08), rgba(59, 122, 253, 0.04));
+  border: 1px solid rgba(76, 175, 80, 0.25);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(76, 175, 80, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.simple-success-message::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(76, 175, 80, 0.6), transparent);
 }
 
 .simple-success-icon {
-  font-size: 1.5rem;
+  font-size: 2rem;
+  text-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+  animation: successPulse 2s ease-in-out infinite;
+}
+
+@keyframes successPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 /* Dialog variants */
@@ -355,22 +393,22 @@
 }
 
 .success-btn {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
+  background: linear-gradient(135deg, #1F5CEB, #3B7AFD);
   color: white;
   border: none;
-  padding: 12px 24px;
-  border-radius: 10px;
+  padding: 15px 30px;
+  border-radius: 12px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1rem;
   cursor: pointer;
   width: 100%;
-  margin-top: 12px;
+  margin-top: 20px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  box-shadow: 0 4px 16px rgba(76, 175, 80, 0.2);
+  text-transform: none;
+  letter-spacing: 0.2px;
+  box-shadow: 0 8px 20px rgba(59, 122, 253, 0.3);
 }
 
 .success-btn::before {
@@ -389,14 +427,14 @@
 }
 
 .success-btn:hover {
-  background: linear-gradient(135deg, #45a049, #3d8b40);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #3B7AFD, #5A8FFF);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(59, 122, 253, 0.4);
 }
 
 .success-btn:active {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 6px 20px rgba(59, 122, 253, 0.3);
 }
 
 /* Responsive design */
