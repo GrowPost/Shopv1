@@ -108,6 +108,30 @@
   overflow-y: auto;
 }
 
+.dialog-content.simple-content {
+  padding: 24px;
+  text-align: center;
+}
+
+.dialog-container.simple {
+  max-width: 400px;
+  width: 90%;
+}
+
+.simple-success-message {
+  font-size: 1.1rem;
+  color: #4CAF50;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.simple-success-icon {
+  font-size: 1.5rem;
+}
+
 /* Dialog variants */
 .dialog-container.success {
   border-color: #4CAF50;

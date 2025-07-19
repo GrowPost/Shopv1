@@ -645,50 +645,21 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
       </Dialog>
 
       <Dialog
-        isOpen={showSuccessDialog && !!purchaseDetails}
+        isOpen={showSuccessDialog}
         onClose={() => setShowSuccessDialog(false)}
-        title="🎉 Purchase Successful!"
         className="success"
-        size="large"
+        variant="simple"
       >
-        {purchaseDetails && (
-          <div className="success-info">
-            <h4>{purchaseDetails.productName}</h4>
-            <p className="purchase-price">
-              <span>Paid:</span>
-              <span style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
-                <img src="/IMG_1858.webp" alt="Balance" style={{width: '16px', height: '16px'}} />
-                {purchaseDetails.price}
-              </span>
-            </p>
-            <div className="product-details">
-              <div className="detail-item">
-                <strong>GrowID/Gmail:</strong>
-                <div className="code-display">{purchaseDetails.code}</div>
-                <button 
-                  className="copy-btn"
-                  onClick={() => {
-                    navigator.clipboard.writeText(purchaseDetails.code);
-                    showInfoDialog('Copied!', 'Code copied to clipboard!');
-                  }}
-                >
-                  Copy Code
-                </button>
-              </div>
-              <div className="detail-item">
-                <strong>Password:</strong>
-                <div className="data-display">{purchaseDetails.data}</div>
-              </div>
-            </div>
-            <p className="success-note">Your purchase has been saved to your purchase history.</p>
-            <button 
-              className="success-btn"
-              onClick={() => setShowSuccessDialog(false)}
-            >
-              Continue Shopping
-            </button>
-          </div>
-        )}
+        <div className="simple-success-message">
+          <span className="simple-success-icon">✅</span>
+          Your purchase has been saved to your purchase history.
+        </div>
+        <button 
+          className="success-btn"
+          onClick={() => setShowSuccessDialog(false)}
+        >
+          Continue Shopping
+        </button>
       </Dialog>
     </div>
   );
