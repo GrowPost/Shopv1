@@ -621,8 +621,10 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
               {selectedProduct.price}
             </div>
             <p>Available Stock: {selectedProduct.stockData ? selectedProduct.stockData.length : 0} items</p>
+            <p style={{color: '#A0A0A0', marginBottom: '20px', fontStyle: 'italic', textAlign: 'center'}}>
+              You will receive a unique product code and data after purchase.
+            </p>
             <div className="purchase-info">
-              <p>You will receive a unique product code and data after purchase.</p>
               <button 
                 className={`buy-product-btn ${userBalance < selectedProduct.price ? 'disabled' : ''}`}
                 onClick={() => {
