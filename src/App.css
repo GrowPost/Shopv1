@@ -175,9 +175,9 @@ body {
 }
 
 .product-card {
-  background: linear-gradient(145deg, rgba(30, 30, 30, 0.95), rgba(20, 20, 20, 0.9));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: rgba(25, 25, 25, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
   padding: 0;
   text-align: center;
   cursor: pointer;
@@ -185,16 +185,15 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 .product-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(59, 122, 253, 0.4);
-  box-shadow: 0 12px 40px rgba(59, 122, 253, 0.2), 0 0 30px rgba(59, 122, 253, 0.1);
-  background: linear-gradient(145deg, rgba(35, 35, 35, 0.98), rgba(25, 25, 25, 0.95));
+  transform: translateY(-4px);
+  border-color: rgba(59, 122, 253, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  background: rgba(30, 30, 30, 0.98);
 }
 
 .product-image {
@@ -203,87 +202,70 @@ body {
   object-fit: cover;
   border-radius: 0;
   margin-bottom: 0;
-  transition: all 0.4s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
 }
 
 .product-card:hover .product-image {
-  transform: scale(1.1);
-  filter: brightness(1.1) saturate(1.2);
+  transform: scale(1.05);
 }
 
 .product-name {
-  font-size: 1.25rem;
-  font-weight: 700;
+  font-size: 1.2rem;
+  font-weight: 600;
   margin: 16px 20px 8px 20px;
   color: white;
-  line-height: 1.3;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  line-height: 1.4;
 }
 
 .product-category {
   color: #B0B0B0;
-  margin: 0 20px 16px 20px;
-  font-size: 0.85rem;
+  margin: 0 20px 12px 20px;
+  font-size: 0.9rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-weight: 500;
+  letter-spacing: 0.3px;
+  font-weight: 400;
 }
 
 .product-price {
-  font-size: 1.4rem;
-  font-weight: 800;
+  font-size: 1.3rem;
+  font-weight: 700;
   color: #3B7AFD;
   margin: 0 20px 12px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  text-shadow: 0 2px 8px rgba(59, 122, 253, 0.3);
-  background: linear-gradient(135deg, rgba(59, 122, 253, 0.08), rgba(59, 122, 253, 0.04));
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(59, 122, 253, 0.2);
+  gap: 6px;
 }
 
 .product-stock {
-  margin: 0 20px 20px 20px;
+  margin: 0 20px 16px 20px;
   font-size: 0.9rem;
   color: #A0A0A0;
-  padding: 6px 12px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .stock-count {
-  font-weight: 700;
+  font-weight: 600;
   color: #4CAF50;
-  text-shadow: 0 1px 3px rgba(76, 175, 80, 0.3);
 }
 
 .stock-count.low-stock {
   color: #FF9800;
-  text-shadow: 0 1px 3px rgba(255, 152, 0, 0.3);
 }
 
 .buy-btn {
   width: calc(100% - 40px);
   margin: 0 20px 20px 20px;
-  background: linear-gradient(135deg, #1F5CEB, #3B7AFD);
+  background: #1F5CEB;
   color: white;
   border: none;
-  padding: 14px 20px;
-  border-radius: 12px;
-  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 15px rgba(31, 92, 235, 0.3);
 }
 
 .buy-btn::before {
@@ -302,17 +284,16 @@ body {
 }
 
 .buy-btn:hover:not(.disabled) {
-  background: linear-gradient(135deg, #3B7AFD, #5A8FFF);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 25px rgba(59, 122, 253, 0.4), 0 0 20px rgba(59, 122, 253, 0.2);
+  background: #3B7AFD;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 122, 253, 0.3);
 }
 
 .buy-btn.disabled {
-  background: linear-gradient(135deg, #2A2A2A, #1A1A1A);
-  color: #666;
+  background: #4A4A4A;
+  color: #888;
   cursor: not-allowed;
   transform: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* Empty States */
