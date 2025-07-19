@@ -12,6 +12,8 @@
   z-index: 1000;
   backdrop-filter: blur(4px);
   animation: dialogOverlayIn 0.2s ease-out;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 @keyframes dialogOverlayIn {
@@ -27,12 +29,14 @@
   background: rgba(30, 34, 51, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  max-height: 90vh;
+  max-height: 95vh;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   animation: dialogIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   backdrop-filter: blur(10px);
+  min-height: auto;
+  height: auto;
 }
 
 @keyframes dialogIn {
@@ -106,6 +110,9 @@
   color: white;
   max-height: none;
   overflow-y: visible;
+  overflow-x: hidden;
+  word-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .dialog-content.simple-content {
@@ -299,6 +306,9 @@
   border: 1px solid rgba(76, 175, 80, 0.18);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(6px);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: visible;
 }
 
 .detail-item {
