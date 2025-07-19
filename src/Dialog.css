@@ -14,6 +14,8 @@
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
 @keyframes dialogOverlayIn {
@@ -30,6 +32,7 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   max-height: 95vh;
+  max-height: 95dvh;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   animation: dialogIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -37,6 +40,8 @@
   backdrop-filter: blur(10px);
   min-height: auto;
   height: auto;
+  margin: auto;
+  flex-shrink: 0;
 }
 
 @keyframes dialogIn {
