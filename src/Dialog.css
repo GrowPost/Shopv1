@@ -336,6 +336,12 @@
   font-weight: 700;
 }
 
+.purchase-price {
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
 .product-details {
   margin: 20px 0;
   text-align: left;
