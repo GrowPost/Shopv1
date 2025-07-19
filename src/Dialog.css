@@ -507,12 +507,13 @@
     padding: 10px;
     align-items: center;
     justify-content: center;
+    align-content: center;
   }
 
   .dialog-container {
     width: 96%;
-    max-height: 95vh;
-    margin: 0;
+    max-height: 90vh;
+    margin: 0 auto;
     border-radius: 10px;
   }
 
