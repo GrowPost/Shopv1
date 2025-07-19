@@ -134,55 +134,8 @@ export default function App() {
         const productsArray = Object.values(productsData);
         setProducts(productsArray);
       } else {
-        // Initialize with default products
-        const defaultProducts = [
-          { 
-            id: Date.now() + 1, 
-            name: "Call of Duty: Modern Warfare", 
-            price: 59.99, 
-            image: "https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=200&h=200&fit=crop", 
-            category: "Action",
-            stockData: [
-              { code: "COD-MW-2024-X7Y9", data: "Premium Edition Key" },
-              { code: "COD-MW-2024-B3K8", data: "Standard Edition Key" }
-            ]
-          },
-          { 
-            id: Date.now() + 2, 
-            name: "The Legend of Zelda", 
-            price: 49.99, 
-            image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=200&h=200&fit=crop", 
-            category: "Adventure",
-            stockData: [
-              { code: "ZELDA-ADV-5K3L", data: "Collector's Edition" },
-              { code: "ZELDA-ADV-M9P2", data: "Digital Deluxe" },
-              { code: "ZELDA-ADV-Q7R4", data: "Standard Edition" }
-            ]
-          },
-          { 
-            id: Date.now() + 3, 
-            name: "FIFA 2024", 
-            price: 39.99, 
-            image: "https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=200&h=200&fit=crop", 
-            category: "Sports",
-            stockData: [
-              { code: "FIFA24-SP-9M2N", data: "Ultimate Team Edition" }
-            ]
-          },
-          { 
-            id: Date.now() + 4, 
-            name: "Minecraft", 
-            price: 26.95, 
-            image: "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?w=200&h=200&fit=crop", 
-            category: "Sandbox",
-            stockData: [
-              { code: "MC-SB-8P4Q", data: "Java Edition" },
-              { code: "MC-SB-7N5M", data: "Bedrock Edition" },
-              { code: "MC-SB-K2J6", data: "Education Edition" }
-            ]
-          }
-        ];
-        defaultProducts.forEach(product => addProduct(product));
+        // No products in Firebase - start with empty array
+        setProducts([]);
       }
     });
 
