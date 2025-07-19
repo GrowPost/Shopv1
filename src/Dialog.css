@@ -7,7 +7,7 @@
     background: rgba(0, 0, 0, 0.8);
     z-index: 1000;
     backdrop-filter: blur(4px);
-    animation: dialogOverlayIn 0.2s ease-out;
+    animation: dialogOverlayIn 0.3s ease-out;
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
@@ -21,9 +21,11 @@
 @keyframes dialogOverlayIn {
   from {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
   to {
     opacity: 1;
+    backdrop-filter: blur(4px);
   }
 }
 
@@ -31,26 +33,24 @@
   background: rgba(30, 34, 51, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  max-height: 95vh;
-  max-height: 95dvh;
+  max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  animation: dialogIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  animation: dialogIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
   backdrop-filter: blur(10px);
+  margin: auto;
 }
 
 @keyframes dialogIn {
   from {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.9);
+    transform: scale(0.8) translateY(-20px);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1) translateY(0);
   }
 }
 
@@ -447,12 +447,14 @@
 /* Responsive design */
 @media (max-width: 768px) {
   .dialog-overlay {
-    padding: 10px;
+    padding: 15px;
+    align-items: center;
+    justify-content: center;
   }
   .dialog-container {
     width: 94%;
-    max-height: 95vh;
-    margin: 8px;
+    max-height: 90vh;
+    margin: 0;
   }
 
   .dialog-container.large {
@@ -502,10 +504,16 @@
 }
 
 @media (max-width: 480px) {
+  .dialog-overlay {
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+  }
+  
   .dialog-container {
     width: 96%;
-    max-height: 98vh;
-    margin: 4px;
+    max-height: 95vh;
+    margin: 0;
     border-radius: 10px;
   }
 
