@@ -27,7 +27,7 @@
   background: rgba(30, 34, 51, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  max-height: 70vh;
+  max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
   animation: dialogIn 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -104,8 +104,8 @@
 .dialog-content {
   padding: 0 24px 24px 24px;
   color: white;
-  max-height: calc(80vh - 120px);
-  overflow-y: auto;
+  max-height: none;
+  overflow-y: visible;
 }
 
 .dialog-content.simple-content {
@@ -441,7 +441,7 @@
 @media (max-width: 768px) {
   .dialog-container {
     width: 94%;
-    max-height: 80vh;
+    max-height: 95vh;
     margin: 8px;
   }
 
@@ -455,7 +455,7 @@
 
   .dialog-content {
     padding: 0 18px 18px 18px;
-    max-height: calc(75vh - 100px);
+    max-height: none;
   }
 
   .dialog-title {
@@ -495,7 +495,7 @@
 @media (max-width: 480px) {
   .dialog-container {
     width: 96%;
-    max-height: 85vh;
+    max-height: 98vh;
     margin: 4px;
     border-radius: 10px;
   }
@@ -506,7 +506,7 @@
 
   .dialog-content {
     padding: 0 16px 16px 16px;
-    max-height: calc(80vh - 80px);
+    max-height: none;
   }
 
   .dialog-title {
