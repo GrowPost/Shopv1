@@ -1,22 +1,19 @@
 .dialog-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
-    z-index: 9999;
-    backdrop-filter: blur(4px);
-    animation: dialogOverlayIn 0.3s ease-out;
-    padding: 20px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    min-height: 100dvh;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
 
 @keyframes dialogOverlayIn {
   from {
@@ -75,8 +72,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 24px 0 24px;
-  margin-bottom: 16px;
+  padding: 20px 24px 10px 24px;
+  border-bottom: none;
+  min-height: 40px;
 }
 
 .dialog-title {
@@ -111,7 +109,7 @@
 }
 
 .dialog-content {
-  padding: 0 24px 24px 24px;
+  padding: 10px 24px 24px 24px;
   color: white;
   max-height: none;
   overflow-y: visible;
@@ -510,7 +508,7 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   .dialog-container {
     width: 96%;
     max-height: 95vh;

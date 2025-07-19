@@ -11,17 +11,17 @@ const Dialog = ({ isOpen, onClose, title, children, className = '', size = 'medi
   };
 
   return (
-    <div className="dialog-overlay" onClick={handleOverlayClick} key="dialog-overlay">
-      <div className={`dialog-container ${className} ${size} ${variant}`} key="dialog-container">
-        {variant !== 'simple' && (
-          <div className="dialog-header" key="dialog-header">
+    <div className="dialog-overlay" onClick={handleOverlayClick}>
+      <div className={`dialog-container ${className} ${size} ${variant}`}>
+        {variant !== 'simple' && title && (
+          <div className="dialog-header">
             <h3 className="dialog-title">{title}</h3>
             <button className="dialog-close-btn" onClick={onClose} type="button">
               ×
             </button>
           </div>
         )}
-        <div className={`dialog-content ${variant === 'simple' ? 'simple-content' : ''}`} key="dialog-content">
+        <div className={`dialog-content ${variant === 'simple' ? 'simple-content' : ''}`}>
           {children}
         </div>
       </div>
