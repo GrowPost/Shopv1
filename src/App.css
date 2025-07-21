@@ -208,7 +208,7 @@ body {
 }
 
 .product-stock-badge {
-  background: #4CAF50;
+  background: #3B7AFD;
   color: white;
   padding: 2px 6px;
   border-radius: 8px;
@@ -222,11 +222,11 @@ body {
 }
 
 .product-stock-badge.low-stock {
-  background: #FF9800;
+  background: #FF6B6B;
 }
 
 .product-stock-badge.out-of-stock {
-  background: #F44336;
+  background: #FF6B6B;
 }
 
 .product-name {
@@ -241,7 +241,7 @@ body {
 }
 
 .product-category {
-  background: #8E44AD;
+  background: #3B7AFD;
   color: white;
   padding: 2px 6px;
   border-radius: 6px;
@@ -270,7 +270,7 @@ body {
 }
 
 .buy-btn {
-  background: #4CAF50;
+  background: #3B7AFD;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -301,9 +301,9 @@ body {
 }
 
 .buy-btn:hover:not(.disabled) {
-  background: #5CBF60;
+  background: #5A8FFF;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 12px rgba(59, 122, 253, 0.3);
 }
 
 .buy-btn.disabled {
@@ -1307,7 +1307,7 @@ body {
 }
 
 .success-btn {
-  background: #4CAF50;
+  background: #3B7AFD;
   color: white;
   border: none;
   padding: 15px 30px;
@@ -1319,7 +1319,7 @@ body {
 }
 
 .success-btn:hover {
-  background: #5CBF60;
+  background: #5A8FFF;
   transform: translateY(-2px);
 }
 
