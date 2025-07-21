@@ -33,7 +33,7 @@ export default function App() {
   const [userBalance, setUserBalance] = useState(125.50);
   const [products, setProducts] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
-  
+
   const [users, setUsers] = useState([]);
   const [errorDialog, setErrorDialog] = useState({ show: false, message: '' });
   const [confirmDialog, setConfirmDialog] = useState({ show: false, message: '', onConfirm: null });
@@ -494,6 +494,35 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [purchaseDetails, setPurchaseDetails] = useState(null);
+  const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+
+  // Sample data for homepage settings and slides
+  const [homepageSettings, setHomepageSettings] = useState({
+    title: "Grow4Bot Store",
+    slides: [
+      {
+        id: 1,
+        title: "Welcome to Grow4Bot!",
+        subtitle: "Get the best bots for your needs.",
+        image: "https://via.placeholder.com/600x200",
+        active: true,
+      },
+      {
+        id: 2,
+        title: "Exclusive Offers",
+        subtitle: "Check out our limited-time deals.",
+        image: "https://via.placeholder.com/600x200",
+        active: true,
+      },
+      {
+        id: 3,
+        title: "New Arrivals",
+        subtitle: "The latest and greatest bots are here!",
+        image: "https://via.placeholder.com/600x200",
+        active: false, // This slide is inactive
+      },
+    ],
+  });
 
   const handleProductClick = (product) => {
     if (product.stockData && product.stockData.length > 0) {
@@ -546,9 +575,67 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
     }
   };
 
+  const activeSlides = homepageSettings.slides.filter(slide => slide.active);
+
   return (
     <div className="page-card">
-      <h1 className="page-title">Grow4Bot</h1>
+      <h1 className="page-title">{homepageSettings.title}</h1>
+
+      {activeSlides.length > 0 && (
+        <div className="homepage-slider">
+          <div className="slide-container">
+            {activeSlides.map((slide, index) => (
+              <div 
+                key={slide.id} 
+                className={`slide ${index === currentSlideIndex ? 'active' : ''}`}
+              >
+                <div className="slide-content">
+                  <div className="slide-text">
+                    <h2 className="slide-title">{slide.title}</h2>
+                    <p className="slide-subtitle">{slide.subtitle}</p>
+                  </div>
+                  {slide.image && (
+                    <div className="slide-image">
+                      <img src={slide.image} alt={slide.title} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {activeSlides.length > 1 && (
+            <>
+              <div className="slide-indicators">
+                {activeSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`slide-indicator ${index === currentSlideIndex ? 'active' : ''}`}
+                    onClick={() => setCurrentSlideIndex(index)}
+                  />
+                ))}
+              </div>
+
+              <button 
+                className="slide-nav prev" 
+                onClick={() => setCurrentSlideIndex(prev => 
+                  prev === 0 ? activeSlides.length - 1 : prev - 1
+                )}
+              >
+                ‹
+              </button>
+              <button 
+                className="slide-nav next" 
+                onClick={() => setCurrentSlideIndex(prev => 
+                  prev === activeSlides.length - 1 ? 0 : prev + 1
+                )}
+              >
+                ›
+              </button>
+            </>
+          )}
+        </div>
+      )}
 
       {products.length === 0 ? (
         <div className="empty-store">
@@ -561,7 +648,7 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
           {products.map(product => {
             const stockCount = product.stockData ? product.stockData.length : 0;
             const stockStatus = stockCount === 0 ? 'out-of-stock' : stockCount <= 2 ? 'low-stock' : '';
-            
+
             return (
               <div key={product.id} className="product-card">
                 <img 
@@ -574,7 +661,7 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                   }}
                 />
                 <div style={{ display: 'none', fontSize: '3rem' }}>🎮</div>
-                
+
                 <div className="product-info">
                   <div className="product-header">
                     <div className="product-title-section">
@@ -584,15 +671,15 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
                       <span className="product-category">Medium Profit</span>
                     </div>
                   </div>
-                  
+
                   <h3 className="product-name">{product.name}</h3>
-                  
+
                   <div className="product-price">
                     <img src="/IMG_1858.webp" alt="Balance" style={{width: '18px', height: '18px'}} />
                     {product.price}
                   </div>
                 </div>
-                
+
                 <div className="product-actions">
                   <button 
                     className={`buy-btn ${userBalance < product.price || !product.stockData || product.stockData.length === 0 ? 'disabled' : ''}`}
@@ -863,6 +950,7 @@ function PurchasesPage({ user }) {
                     📋 Copy Code
                   </button>
                 </div>
+              ```python
               );
             })}
           </div>
