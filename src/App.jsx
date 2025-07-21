@@ -38,6 +38,8 @@ export default function App() {
   const [errorDialog, setErrorDialog] = useState({ show: false, message: '' });
   const [confirmDialog, setConfirmDialog] = useState({ show: false, message: '', onConfirm: null });
   const [infoDialog, setInfoDialog] = useState({ show: false, title: '', message: '' });
+  const [slideOutOpen, setSlideOutOpen] = useState(false);
+  const [adminControlsOpen, setAdminControlsOpen] = useState(false);
 
   // Database functions
   const createUserProfile = async (user) => {
@@ -355,6 +357,13 @@ export default function App() {
         </div>
         <div className="profile-section">
           <button 
+            className="slide-toggle-btn" 
+            onClick={() => setSlideOutOpen(!slideOutOpen)}
+            title="Menu"
+          >
+            ☰
+          </button>
+          <button 
             className="profile-btn" 
             onClick={() => signOut(auth)}
             title="Logout"
@@ -424,6 +433,116 @@ export default function App() {
           )}
         </div>
       </nav>
+
+      {/* Slide-out Layer */}
+      <div className={`slide-out-overlay ${slideOutOpen ? 'open' : ''}`} onClick={() => setSlideOutOpen(false)}></div>
+      <div className={`slide-out-layer ${slideOutOpen ? 'open' : ''}`}>
+        <div className="slide-out-header">
+          <h3>Menu</h3>
+          <button className="slide-out-close" onClick={() => setSlideOutOpen(false)}>×</button>
+        </div>
+        <div className="slide-out-content">
+          <div className="slide-out-section">
+            <h4>Quick Actions</h4>
+            <button className="slide-out-btn" onClick={() => { setPage("home"); setSlideOutOpen(false); }}>
+              🏠 Home
+            </button>
+            <button className="slide-out-btn" onClick={() => { setPage("wallet"); setSlideOutOpen(false); }}>
+              💰 Wallet
+            </button>
+            <button className="slide-out-btn" onClick={() => { setPage("purchases"); setSlideOutOpen(false); }}>
+              🛍️ Purchases
+            </button>
+            {isAdmin && (
+              <button className="slide-out-btn" onClick={() => { setPage("admin"); setSlideOutOpen(false); }}>
+                ⚙️ Admin Panel
+              </button>
+            )}
+          </div>
+          
+          {isAdmin && (
+            <div className="slide-out-section">
+              <h4>Admin Controls</h4>
+              <button 
+                className="slide-out-btn admin-control-toggle"
+                onClick={() => setAdminControlsOpen(!adminControlsOpen)}
+              >
+                🔧 Quick Admin Controls {adminControlsOpen ? '▼' : '▶'}
+              </button>
+              
+              <div className={`admin-controls-slide ${adminControlsOpen ? 'open' : ''}`}>
+                <div className="admin-quick-stats">
+                  <div className="stat-item">
+                    <span>Total Products:</span>
+                    <span>{products.length}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span>Total Users:</span>
+                    <span>{users.length}</span>
+                  </div>
+                  <div className="stat-item">
+                    <span>Low Stock Products:</span>
+                    <span>{products.filter(p => (p.stockData?.length || 0) <= 2).length}</span>
+                  </div>
+                </div>
+                
+                <div className="admin-quick-actions">
+                  <button 
+                    className="admin-quick-btn"
+                    onClick={() => {
+                      const productName = prompt("Enter product name:");
+                      if (productName) {
+                        const product = products.find(p => p.name.toLowerCase().includes(productName.toLowerCase()));
+                        if (product) {
+                          const code = prompt("Enter GrowID/Gmail:");
+                          const data = prompt("Enter Password:");
+                          if (code && data) {
+                            const newStockData = [...(product.stockData || []), { code, data }];
+                            updateProductStock(product.id, newStockData);
+                            showInfoDialog('Success', 'Stock added successfully!');
+                          }
+                        } else {
+                          showErrorDialog('Product not found!');
+                        }
+                      }
+                    }}
+                  >
+                    📦 Quick Add Stock
+                  </button>
+                  
+                  <button 
+                    className="admin-quick-btn"
+                    onClick={() => {
+                      const uid = prompt("Enter user UID:");
+                      const amount = parseFloat(prompt("Enter amount to add:"));
+                      if (uid && amount && amount > 0) {
+                        addBalanceToUser(uid, amount);
+                        showInfoDialog('Success', `Added $${amount} to user wallet!`);
+                      } else {
+                        showErrorDialog('Please enter valid UID and amount');
+                      }
+                    }}
+                  >
+                    💰 Quick Add Balance
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div className="slide-out-section">
+            <h4>Account</h4>
+            <div className="user-info-slide">
+              <p><strong>Email:</strong> {user?.email}</p>
+              <p><strong>Balance:</strong> ${userBalance.toFixed(2)}</p>
+              {isAdmin && <p><strong>Role:</strong> Administrator</p>}
+            </div>
+            <button className="slide-out-btn danger" onClick={() => { signOut(auth); setSlideOutOpen(false); }}>
+              🚪 Logout
+            </button>
+          </div>
+        </div>
+      </div>
 
       <Dialog
         isOpen={errorDialog.show}
