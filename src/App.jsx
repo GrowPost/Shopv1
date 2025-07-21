@@ -548,8 +548,6 @@ function HomePage({ products, userBalance, updateUserBalance, user, addPurchase,
 
   return (
     <div className="page-card">
-      <h1 className="page-title">Grow4Bot</h1>
-
       {products.length === 0 ? (
         <div className="empty-store">
           <div className="empty-icon">🎮</div>

@@ -290,11 +290,11 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 200%;
+  left: -150%;
+  width: 300%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15), transparent);
-  transition: left 0.8s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.4), transparent);
+  transition: left 1s ease;
 }
 
 .buy-btn:hover:not(.disabled)::before {
@@ -573,11 +573,11 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 200%;
+  left: -150%;
+  width: 300%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15), transparent);
-  transition: left 0.8s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.4), transparent);
+  transition: left 1s ease;
 }
 
 .btn-primary:hover:not(:disabled)::before {
@@ -1003,11 +1003,11 @@ body {
   content: '';
   position: absolute;
   top: 0;
-  left: -100%;
-  width: 200%;
+  left: -150%;
+  width: 300%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15), transparent);
-  transition: left 0.8s ease;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.4), transparent);
+  transition: left 1s ease;
 }
 
 .admin-btn:hover::before {
