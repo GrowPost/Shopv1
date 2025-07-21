@@ -22,7 +22,7 @@ body {
 .header {
   background: rgba(20, 20, 20, 0.95);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
   padding: 15px 20px;
   display: flex;
   justify-content: space-between;
@@ -124,7 +124,7 @@ body {
 
 .page-card {
   background: rgba(30, 30, 30, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: none;
   border-radius: 8px;
   padding: 30px;
 }
@@ -342,7 +342,7 @@ body {
 .nav-bar {
   background: rgba(20, 20, 20, 0.95);
   backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: none;
   padding: 15px 20px;
   position: fixed;
   bottom: 0;
