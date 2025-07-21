@@ -332,6 +332,12 @@ body {
   color: white;
 }
 
+/* Main content area */
+.main-content {
+  padding-bottom: 100px; /* Space for navigation */
+  min-height: 100vh;
+}
+
 /* Navigation Bar */
 .nav-bar {
   background: rgba(20, 20, 20, 0.95);

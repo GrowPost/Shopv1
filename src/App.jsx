@@ -338,7 +338,7 @@ export default function App() {
   }
 
   return (
-    <div className="main-container">
+    <>
       <header className="header sticky-header">
         <div className="logo">
           <span className="logo-g">Grow4</span>
@@ -364,7 +364,7 @@ export default function App() {
         </div>
       </header>
 
-      <div className="content">
+      <main className="main-content">
         {page === "home" && <HomePage 
           products={products} 
           userBalance={userBalance} 
@@ -392,7 +392,7 @@ export default function App() {
           showConfirmDialog={(message, onConfirm) => setConfirmDialog({ show: true, message, onConfirm })}
           showInfoDialog={(title, message) => setInfoDialog({ show: true, title, message })}
         />}
-      </div>
+      </main>
 
       <nav className="nav-bar">
         <div className="nav-buttons">
@@ -486,7 +486,7 @@ export default function App() {
           OK
         </button>
       </Dialog>
-    </div>
+    </>
   );
 }
 
