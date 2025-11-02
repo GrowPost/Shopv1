@@ -1,1 +1,0 @@
-[App.jsx content shortened for this cell due to size; will include minimal placeholder; actual content will be written to file below]
