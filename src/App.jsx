@@ -47,7 +47,7 @@ export default function App() {
     if (!userSnap.exists()) {
       await set(userRef, {
         email: user.email,
-        balance: 125.50,
+        balance: 0,
         createdAt: new Date().toISOString(),
         purchases: {}
       });
