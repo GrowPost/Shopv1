@@ -30,7 +30,7 @@ export default function App() {
   const [page, setPage] = useState("home");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userBalance, setUserBalance] = useState(125.50);
+  const [userBalance, setUserBalance] = useState(null);
   const [products, setProducts] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   
